@@ -51,7 +51,7 @@ source("~/Dropbox/datascience/R/mydsutils.R")
 source("~/Dropbox/datascience/R/myplot.R")
 source("~/Dropbox/datascience/R/mypetrinet.R")
 # Gather all package requirements here
-#suppressPackageStartupMessages(require())
+suppressPackageStartupMessages(require(plyr))
 
 #require(sos); findFn("pinv", maxPages=2, sortby="MaxScore")
 
@@ -103,7 +103,7 @@ print(script_df)
 #
 #       Build splines   require(splines); bsBasis <- bs(training$age, df=3)
 
-# entity_df <- mutate(entity_df, 
+entity_df <- mutate(entity_df, 
 #     <col_name>_fctr=as.factor(<col_name>),
 #     
 #     Date.my=as.Date(strptime(Date, "%m/%d/%y %H:%M")),
@@ -111,13 +111,16 @@ print(script_df)
 #     Month=months(Date.my),
 #     Weekday=weekdays(Date.my)
 #     
-#                     )
+    MetroAreaCode.NA=is.na(MetroAreaCode)
+                    )
 # 
 # predct_df <- mutate(predct_df, 
 #                     )
 
 print(summary(entity_df))
+print(sapply(names(entity_df), function(col) sum(is.na(entity_df[, col]))))
 print(summary(predct_df))
+print(sapply(names(predct_df), function(col) sum(is.na(predct_df[, col]))))
 
 #pairs(subset(entity_df, select=-c(col_symbol)))
 
@@ -133,6 +136,17 @@ print(sort(table(entity_df$State)))
 print(Citizenship_freq_entity_df <- as.data.frame(table(entity_df$Citizenship)))
 names(Citizenship_freq_entity_df)[1] <- "Citizenship"; print(Citizenship_freq_entity_df)
 print(1 - (Citizenship_freq_entity_df[Citizenship_freq_entity_df$Citizenship == "Non-Citizen", "Freq"] * 1.0 / sum(Citizenship_freq_entity_df$Freq)))
+
+print(table(is.na(entity_df$Married), entity_df$Region))
+print(table(is.na(entity_df$Married), entity_df$Sex))
+print(table(is.na(entity_df$Married), entity_df$Age))
+
+print(prblm_2_4_df <- mycreate_xtab(entity_df, c("Region", "MetroAreaCode.NA")))
+prblm_2_4_df[is.na(prblm_2_4_df)] <- 0
+print(prblm_2_4_df <- mutate(prblm_2_4_df, MetroCode.NA.ratio = MetroAreaCode.NA.TRUE * 1.0 / (MetroAreaCode.NA.FALSE + MetroAreaCode.NA.TRUE)))
+
+print(prblm_2_5_arr <- sort(tapply(entity_df$MetroAreaCode.NA, entity_df$State, mean, na.rm=TRUE)))
+
 # print(which.min(table(entity_df$<col_name>)))
 # print(which.max(table(entity_df$<col_name>)))
 # print(which.max(table(entity_df$<col1_name>, entity_df$<col2_name>)[, 2]))

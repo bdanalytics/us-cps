@@ -32,7 +32,7 @@ source("~/Dropbox/datascience/R/mydsutils.R")
 source("~/Dropbox/datascience/R/myplot.R")
 source("~/Dropbox/datascience/R/mypetrinet.R")
 # Gather all package requirements here
-#suppressPackageStartupMessages(require())
+suppressPackageStartupMessages(require(plyr))
 
 #require(sos); findFn("pinv", maxPages=2, sortby="MaxScore")
 
@@ -290,7 +290,7 @@ print(script_df)
 #
 #       Build splines   require(splines); bsBasis <- bs(training$age, df=3)
 
-# entity_df <- mutate(entity_df, 
+entity_df <- mutate(entity_df, 
 #     <col_name>_fctr=as.factor(<col_name>),
 #     
 #     Date.my=as.Date(strptime(Date, "%m/%d/%y %H:%M")),
@@ -298,7 +298,8 @@ print(script_df)
 #     Month=months(Date.my),
 #     Weekday=weekdays(Date.my)
 #     
-#                     )
+    MetroAreaCode.NA=is.na(MetroAreaCode)
+                    )
 # 
 # predct_df <- mutate(predct_df, 
 #                     )
@@ -331,14 +332,31 @@ print(summary(entity_df))
 ##                     3rd Qu.:0.0000   3rd Qu.: 57.00                       
 ##                     Max.   :1.0000   Max.   :555.00                       
 ##                                                                           
-##  EmploymentStatus     Industry        
-##  Length:131302      Length:131302     
-##  Class :character   Class :character  
-##  Mode  :character   Mode  :character  
-##                                       
-##                                       
-##                                       
+##  EmploymentStatus     Industry         MetroAreaCode.NA
+##  Length:131302      Length:131302      Mode :logical   
+##  Class :character   Class :character   FALSE:97064     
+##  Mode  :character   Mode  :character   TRUE :34238     
+##                                        NA's :0         
+##                                                        
+##                                                        
 ## 
+```
+
+```r
+print(sapply(names(entity_df), function(col) sum(is.na(entity_df[, col]))))
+```
+
+```
+##  PeopleInHousehold             Region              State 
+##                  0                  0                  0 
+##      MetroAreaCode                Age            Married 
+##              34238                  0              25338 
+##                Sex          Education               Race 
+##                  0              25338                  0 
+##           Hispanic CountryOfBirthCode        Citizenship 
+##                  0                  0                  0 
+##   EmploymentStatus           Industry   MetroAreaCode.NA 
+##              25789              65060                  0
 ```
 
 ```r
@@ -378,6 +396,23 @@ print(summary(predct_df))
 ##                                       
 ##                                       
 ## 
+```
+
+```r
+print(sapply(names(predct_df), function(col) sum(is.na(predct_df[, col]))))
+```
+
+```
+##  PeopleInHousehold             Region              State 
+##                  0                  0                  0 
+##      MetroAreaCode                Age            Married 
+##                 36                  0                 26 
+##                Sex          Education               Race 
+##                  0                 26                  0 
+##           Hispanic CountryOfBirthCode        Citizenship 
+##                  0                  0                  0 
+##   EmploymentStatus           Industry 
+##                 26                 78
 ```
 
 ```r
@@ -498,6 +533,134 @@ print(1 - (Citizenship_freq_entity_df[Citizenship_freq_entity_df$Citizenship == 
 ```
 
 ```r
+print(table(is.na(entity_df$Married), entity_df$Region))
+```
+
+```
+##        
+##         Midwest Northeast South  West
+##   FALSE   24609     21432 33535 26388
+##   TRUE     6075      4507  7967  6789
+```
+
+```r
+print(table(is.na(entity_df$Married), entity_df$Sex))
+```
+
+```
+##        
+##         Female  Male
+##   FALSE  55264 50700
+##   TRUE   12217 13121
+```
+
+```r
+print(table(is.na(entity_df$Married), entity_df$Age))
+```
+
+```
+##        
+##            0    1    2    3    4    5    6    7    8    9   10   11   12
+##   FALSE    0    0    0    0    0    0    0    0    0    0    0    0    0
+##   TRUE  1283 1559 1574 1693 1695 1795 1721 1681 1729 1748 1750 1721 1797
+##        
+##           13   14   15   16   17   18   19   20   21   22   23   24   25
+##   FALSE    0    0 1795 1751 1764 1596 1517 1398 1525 1536 1638 1627 1604
+##   TRUE  1802 1790    0    0    0    0    0    0    0    0    0    0    0
+##        
+##           26   27   28   29   30   31   32   33   34   35   36   37   38
+##   FALSE 1643 1657 1736 1645 1854 1762 1790 1804 1653 1716 1663 1531 1530
+##   TRUE     0    0    0    0    0    0    0    0    0    0    0    0    0
+##        
+##           39   40   41   42   43   44   45   46   47   48   49   50   51
+##   FALSE 1542 1571 1673 1711 1819 1764 1749 1665 1647 1791 1989 1966 1931
+##   TRUE     0    0    0    0    0    0    0    0    0    0    0    0    0
+##        
+##           52   53   54   55   56   57   58   59   60   61   62   63   64
+##   FALSE 1935 1994 1912 1895 1935 1827 1874 1758 1746 1735 1595 1596 1519
+##   TRUE     0    0    0    0    0    0    0    0    0    0    0    0    0
+##        
+##           65   66   67   68   69   70   71   72   73   74   75   76   77
+##   FALSE 1569 1577 1227 1130 1062 1195 1031  941  896  842  763  729  698
+##   TRUE     0    0    0    0    0    0    0    0    0    0    0    0    0
+##        
+##           78   79   80   85
+##   FALSE  659  661 2664 2446
+##   TRUE     0    0    0    0
+```
+
+```r
+print(prblm_2_4_df <- mycreate_xtab(entity_df, c("Region", "MetroAreaCode.NA")))
+```
+
+```
+##      Region MetroAreaCode.NA.FALSE MetroAreaCode.NA.TRUE
+## 1   Midwest                  20010                 10674
+## 2 Northeast                  20330                  5609
+## 3     South                  31631                  9871
+## 4      West                  25093                  8084
+```
+
+```r
+prblm_2_4_df[is.na(prblm_2_4_df)] <- 0
+print(prblm_2_4_df <- mutate(prblm_2_4_df, MetroCode.NA.ratio = MetroAreaCode.NA.TRUE * 1.0 / (MetroAreaCode.NA.FALSE + MetroAreaCode.NA.TRUE)))
+```
+
+```
+##      Region MetroAreaCode.NA.FALSE MetroAreaCode.NA.TRUE
+## 1   Midwest                  20010                 10674
+## 2 Northeast                  20330                  5609
+## 3     South                  31631                  9871
+## 4      West                  25093                  8084
+##   MetroCode.NA.ratio
+## 1          0.3478686
+## 2          0.2162381
+## 3          0.2378440
+## 4          0.2436628
+```
+
+```r
+print(prblm_2_5_arr <- sort(tapply(entity_df$MetroAreaCode.NA, entity_df$State, mean, na.rm=TRUE)))
+```
+
+```
+## District of Columbia           New Jersey         Rhode Island 
+##           0.00000000           0.00000000           0.00000000 
+##           California              Florida        Massachusetts 
+##           0.02048401           0.03923092           0.06492199 
+##             Maryland             New York          Connecticut 
+##           0.06937500           0.08060769           0.08568406 
+##             Illinois             Colorado              Arizona 
+##           0.11221881           0.12991453           0.13154450 
+##               Nevada                Texas            Louisiana 
+##           0.13308190           0.14370496           0.16137931 
+##         Pennsylvania             Michigan           Washington 
+##           0.17430025           0.17825661           0.18131868 
+##              Georgia             Virginia                 Utah 
+##           0.19843249           0.19844226           0.21009772 
+##               Oregon             Delaware           New Mexico 
+##           0.21821925           0.23396567           0.24500907 
+##               Hawaii                 Ohio              Alabama 
+##           0.24916627           0.25122349           0.25872093 
+##              Indiana            Wisconsin       South Carolina 
+##           0.29141717           0.29932986           0.31302774 
+##            Minnesota             Oklahoma             Missouri 
+##           0.31506849           0.32764281           0.32867133 
+##            Tennessee               Kansas       North Carolina 
+##           0.35594170           0.36227390           0.37304315 
+##                 Iowa             Arkansas                Idaho 
+##           0.48694620           0.49049965           0.49868248 
+##             Kentucky        New Hampshire             Nebraska 
+##           0.50678979           0.56874530           0.58132376 
+##                Maine              Vermont          Mississippi 
+##           0.59832081           0.65238095           0.69430894 
+##         South Dakota         North Dakota        West Virginia 
+##           0.70250000           0.73738602           0.75585522 
+##              Montana               Alaska              Wyoming 
+##           0.83607908           1.00000000           1.00000000
+```
+
+```r
 # print(which.min(table(entity_df$<col_name>)))
 # print(which.max(table(entity_df$<col_name>)))
 # print(which.max(table(entity_df$<col1_name>, entity_df$<col2_name>)[, 2]))
@@ -505,10 +668,6 @@ print(1 - (Citizenship_freq_entity_df[Citizenship_freq_entity_df$Citizenship == 
 # print(xtabs(~ <col1_name>, entity_df))
 # print(xtabs(~ <col1_name> + <col2_name>, entity_df))
 print(xtab_entity_df <- mycreate_xtab(entity_df, c("Race", "Hispanic")))
-```
-
-```
-## Loading required package: reshape2
 ```
 
 ```
@@ -621,13 +780,14 @@ We reject the null hypothesis i.e. we have evidence to conclude that am_fctr imp
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] reshape2_1.4.1  doBy_4.5-13     survival_2.38-1 ggplot2_1.0.0  
+## [1] reshape2_1.4.1  plyr_1.8.1      doBy_4.5-13     survival_2.38-1
+## [5] ggplot2_1.0.0  
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] codetools_0.2-10 colorspace_1.2-5 digest_0.6.8     evaluate_0.5.5  
 ##  [5] formatR_1.0      grid_3.1.2       gtable_0.1.2     htmltools_0.2.6 
 ##  [9] knitr_1.9        lattice_0.20-30  MASS_7.3-39      Matrix_1.1-5    
-## [13] munsell_0.4.2    plyr_1.8.1       proto_0.3-10     Rcpp_0.11.4     
-## [17] rmarkdown_0.5.1  scales_0.2.4     splines_3.1.2    stringr_0.6.2   
-## [21] tcltk_3.1.2      tools_3.1.2      yaml_2.1.13
+## [13] munsell_0.4.2    proto_0.3-10     Rcpp_0.11.4      rmarkdown_0.5.1 
+## [17] scales_0.2.4     splines_3.1.2    stringr_0.6.2    tcltk_3.1.2     
+## [21] tools_3.1.2      yaml_2.1.13
 ```
