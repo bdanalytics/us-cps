@@ -178,6 +178,7 @@ script_df <- rbind(script_df,
                                    "chunk_step_minor"]+1))
 print(script_df)
 ```
+
 ### Step ``r script_df[nrow(script_df), "chunk_step_major"]``.``r script_df[nrow(script_df), "chunk_step_minor"]``: manage missing data
 ```{r manage_missing_data_1, cache=TRUE}
 
@@ -222,7 +223,21 @@ print(prblm_3_6_arr <- sort(tapply(entity_df$Education == "No high school diplom
 map_country_df <- myimport_data(
     url="https://courses.edx.org/c4x/MITx/15.071x_2/asset/CountryCodes.csv", 
     comment="map_metroarea_df", print_diagn=TRUE)
-
+# entity_tmp_df <- mymap_codes(entity_df, "CountryOfBirthCode", "CountryOfBirth", 
+#         			map_country_df, map_join_col_name="Code", map_tgt_col_name="Country")
+entity_df <- mymap_codes(entity_df, "CountryOfBirthCode", "Country", 
+            		map_country_df, map_join_col_name="Code")
+print(sapply(names(entity_df), function(col) sum(is.na(entity_df[, col]))))
+print(Country_freq_entity_df <- mycreate_tbl_df(entity_df, "Country"))
+print(Country_na_by_MetroArea_arr <- 
+    sort(tapply(entity_df$Country != "United States", entity_df$MetroArea, mean, na.rm=TRUE)))
+print(India_by_MetroArea_arr <- 
+    sort(tapply(entity_df$Country == "India", entity_df$MetroArea, sum, na.rm=TRUE)))
+print(Brazil_by_MetroArea_arr <- 
+    sort(tapply(entity_df$Country == "Brazil", entity_df$MetroArea, sum, na.rm=TRUE)))
+print(Somalia_by_MetroArea_arr <- 
+    sort(tapply(entity_df$Country == "Somalia", entity_df$MetroArea, sum, na.rm=TRUE)))
+    
 script_df <- rbind(script_df, 
                    data.frame(chunk_label="extract_features", 
                               chunk_step_major=max(script_df$chunk_step_major)+1, 

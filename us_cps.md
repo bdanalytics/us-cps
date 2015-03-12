@@ -698,6 +698,7 @@ print(script_df)
 ## 2        inspect_data                2                1
 ## 3 manage_missing_data                2                2
 ```
+
 ### Step `2`.`2`: manage missing data
 
 ```r
@@ -2810,6 +2811,2354 @@ map_country_df <- myimport_data(
 ```
 
 ```r
+# entity_tmp_df <- mymap_codes(entity_df, "CountryOfBirthCode", "CountryOfBirth", 
+#         			map_country_df, map_join_col_name="Code", map_tgt_col_name="Country")
+entity_df <- mymap_codes(entity_df, "CountryOfBirthCode", "Country", 
+            		map_country_df, map_join_col_name="Code")
+```
+
+```
+##   CountryOfBirthCode       Country     _n
+## 1                 57 United States 115063
+## 2                303        Mexico   3921
+## 3                233   Philippines    839
+## 4                210         India    770
+## 5                207         China    581
+## 6                 73   Puerto Rico    518
+##     CountryOfBirthCode         Country _n
+## 61                 205 Myanmar (Burma) 45
+## 78                 311      Costa Rica 29
+## 96                 246      Uzbekistan 19
+## 130                310          Belize  9
+## 137                106         Denmark  6
+## 155                423            <NA>  3
+##     CountryOfBirthCode          Country _n
+## 156                425             <NA>  3
+## 157                142 Northern Ireland  2
+## 158                228             <NA>  2
+## 159                453         Tanzania  2
+## 160                430             <NA>  1
+## 161                460             <NA>  1
+```
+
+![](us_cps_files/figure-html/encode_data_1-2.png) 
+
+```r
+print(sapply(names(entity_df), function(col) sum(is.na(entity_df[, col]))))
+```
+
+```
+## CountryOfBirthCode      MetroAreaCode  PeopleInHousehold 
+##                  0              34238                  0 
+##             Region              State                Age 
+##                  0                  0                  0 
+##            Married                Sex          Education 
+##              25338                  0              25338 
+##               Race           Hispanic        Citizenship 
+##                  0                  0                  0 
+##   EmploymentStatus           Industry   MetroAreaCode.NA 
+##              25789              65060                  0 
+##          MetroArea            Country 
+##              34238                176
+```
+
+```r
+print(Country_freq_entity_df <- mycreate_tbl_df(entity_df, "Country"))
+```
+
+```
+##                            Country  .freq
+## 1                 Northern Ireland      2
+## 2                         Tanzania      2
+## 3                       Azerbaijan      3
+## 4                   Czechoslovakia      3
+## 5                 St. Kitts--Nevis      3
+## 6                          Georgia      5
+## 7                         Barbados      6
+## 8                          Denmark      6
+## 9                           Latvia      6
+## 10                           Samoa      6
+## 11                         Senegal      6
+## 12                       Singapore      6
+## 13                        Slovakia      6
+## 14                           Tonga      6
+## 15                        Zimbabwe      6
+## 16    South America, not specified      7
+## 17                       St. Lucia      7
+## 18                         Algeria      9
+## 19         Americas, not specified      9
+## 20                          Belize      9
+## 21                            Fiji      9
+## 22  St. Vincent and the Grenadines      9
+## 23                         Bahamas     10
+## 24                         Finland     10
+## 25                          Kuwait     10
+## 26                       Lithuania     10
+## 27                  Czech Republic     11
+## 28                        Dominica     11
+## 29                        Paraguay     11
+## 30                         Croatia     12
+## 31                       Macedonia     12
+## 32                         Moldova     12
+## 33             Antigua and Barbuda     13
+## 34                         Belgium     13
+## 35                         Bermuda     13
+## 36                         Bolivia     13
+## 37                         Grenada     13
+## 38                           Sudan     13
+## 39                      Cape Verde     15
+## 40                         Eritrea     15
+## 41                    Sierra Leone     15
+## 42                          Uganda     15
+## 43                         Austria     17
+## 44                         Morocco     17
+## 45                       Sri Lanka     17
+## 46            U. S. Virgin Islands     17
+## 47                         Uruguay     17
+## 48                         Albania     18
+## 49                          Norway     18
+## 50           Europe, not specified     19
+## 51                      Uzbekistan     19
+## 52      West Indies, not specified     19
+## 53                        Malaysia     20
+## 54                          Serbia     20
+## 55                          Azores     22
+## 56                            USSR     22
+## 57                     New Zealand     23
+## 58                     Switzerland     23
+## 59                           Yemen     23
+## 60                         Belarus     24
+## 61                        Scotland     24
+## 62                      Yugoslavia     24
+## 63                         Hungary     25
+## 64                     Afghanistan     26
+## 65                       Indonesia     26
+## 66                     Netherlands     28
+## 67                          Sweden     28
+## 68                        Bulgaria     29
+## 69                      Costa Rica     29
+## 70                    Saudi Arabia     29
+## 71                            Guam     31
+## 72                        Cameroon     32
+## 73                           Syria     32
+## 74                         Armenia     35
+## 75                          Jordan     36
+## 76                           Chile     37
+## 77             Asia, not specified     39
+## 78                         Ireland     39
+## 79                           Spain     41
+## 80                      Bangladesh     42
+## 81                       Australia     43
+## 82                           Nepal     44
+## 83                          Panama     44
+## 84                         Lebanon     45
+## 85                 Myanmar (Burma)     45
+## 86                    South Africa     48
+## 87                          Turkey     48
+## 88                        Cambodia     49
+## 89                         Liberia     52
+## 90                           Kenya     55
+## 91                         Romania     55
+## 92                          Greece     56
+## 93                          Israel     57
+## 94             Trinidad and Tobago     60
+## 95            Bosnia & Herzegovina     61
+## 96                       Venezuela     61
+## 97                       Argentina     64
+## 98                       Hong Kong     64
+## 99                        Portugal     64
+## 100                          Egypt     65
+## 101                        Somalia     72
+## 102                         France     73
+## 103                    South Korea     73
+## 104                          Ghana     76
+## 105                      Nicaragua     76
+## 106                       Ethiopia     80
+## 107                      Elsewhere     81
+## 108                        Nigeria     85
+## 109                           Iraq     97
+## 110                           Laos     98
+## 111                         Taiwan    102
+## 112                        Ukraine    104
+## 113                         Guyana    109
+## 114                       Pakistan    109
+## 115                 United Kingdom    111
+## 116                       Thailand    128
+## 117          Africa, not specified    129
+## 118                        Ecuador    136
+## 119                           Peru    136
+## 120                           Iran    144
+## 121                          Italy    149
+## 122                         Brazil    159
+## 123                         Poland    162
+## 124                          Haiti    167
+## 125                         Russia    173
+## 126                        England    179
+## 127                          Japan    187
+## 128                       Honduras    189
+## 129                       Columbia    206
+## 130                        Jamaica    217
+## 131                      Guatemala    309
+## 132             Dominican Republic    330
+## 133                          Korea    334
+## 134                         Canada    410
+## 135                           Cuba    426
+## 136                        Germany    438
+## 137                        Vietnam    458
+## 138                    El Salvador    477
+## 139                    Puerto Rico    518
+## 140                          China    581
+## 141                          India    770
+## 142                    Philippines    839
+## 143                         Mexico   3921
+## 144                  United States 115063
+```
+
+```r
+print(Country_na_by_MetroArea_arr <- 
+    sort(tapply(entity_df$Country != "United States", entity_df$MetroArea, mean, na.rm=TRUE)))
+```
+
+```
+##                                        Decatur, IL 
+##                                        0.000000000 
+##                                       Florence, AL 
+##                                        0.000000000 
+##                           Kingsport-Bristol, TN-VA 
+##                                        0.000000000 
+##                                        Lubbock, TX 
+##                                        0.000000000 
+##                                          Macon, GA 
+##                                        0.000000000 
+##                                         Monroe, MI 
+##                                        0.000000000 
+##                                     Ocean City, NJ 
+##                                        0.000000000 
+##                 Saginaw-Saginaw Township North, MI 
+##                                        0.000000000 
+##                                     Charleston, WV 
+##                                        0.003816794 
+##                                         Racine, WI 
+##                                        0.008403361 
+##                                        Jackson, MS 
+##                                        0.009009009 
+##                                     Eau Claire, WI 
+##                                        0.009090909 
+##                                       Billings, MT 
+##                                        0.010050251 
+##                                  Evansville, IN-KY 
+##                                        0.010101010 
+##                                     Janesville, WI 
+##                                        0.010101010 
+##                                         Wausau, WI 
+##                                        0.010416667 
+##                                      Knoxville, TN 
+##                                        0.011904762 
+##                                        Altoona, PA 
+##                                        0.012195122 
+##                         Michigan City-La Porte, IN 
+##                                        0.012987013 
+##                                         Albany, GA 
+##                                        0.014705882 
+##                                       Savannah, GA 
+##                                        0.014851485 
+##                                       Anderson, SC 
+##                                        0.015625000 
+##                              Kalamazoo-Portage, MI 
+##                                        0.015748031 
+##                                      Duluth, MN-WI 
+##                                        0.015873016 
+##                                      Johnstown, PA 
+##                                        0.015873016 
+##                                        Appleton,WI 
+##                                        0.016000000 
+##                                      Lafayette, LA 
+##                                        0.016574586 
+##                                         Monroe, LA 
+##                                        0.016759777 
+##                                       Victoria, TX 
+##                                        0.017241379 
+##                                    Bloomington, IN 
+##                                        0.019230769 
+##                            Niles-Benton Harbor, MI 
+##                                        0.019607843 
+##                                       Columbia, MO 
+##                                        0.021276596 
+##                                           Bend, OR 
+##                                        0.021428571 
+##                                   Harrisonburg, VA 
+##                                        0.022222222 
+##                                         Pueblo, CO 
+##                                        0.023076923 
+##                                       Valdosta, GA 
+##                                        0.023809524 
+##                        South Bend-Mishawaka, IN-MI 
+##                                        0.024691358 
+##                                   Cedar Rapids, IA 
+##                                        0.025510204 
+##                                   York-Hanover, PA 
+##                                        0.025641026 
+##                                         Dayton, OH 
+##                                        0.026119403 
+##                                      Salisbury, MD 
+##                                        0.027027027 
+##                                         Mobile, AL 
+##                                        0.027272727 
+##                                     Bellingham, WA 
+##                                        0.028571429 
+##                                        Jackson, MI 
+##                                        0.028571429 
+##                Davenport-Moline-Rock Island, IA-IL 
+##                                        0.029166667 
+##                                          Flint, MI 
+##                                        0.029411765 
+##         Myrtle Beach-Conway-North Myrtle Beach, SC 
+##                                        0.029411765 
+##                                    Springfield, OH 
+##                                        0.029411765 
+##                                         Toledo, OH 
+##                                        0.029787234 
+##                                        Roanoke, VA 
+##                                        0.030303030 
+##                               Canton-Massillon, OH 
+##                                        0.033898305 
+##                                         Joplin, MO 
+##                                        0.033898305 
+##                         Panama City-Lynn Haven, FL 
+##                                        0.033898305 
+##                          Fort Collins-Loveland, CO 
+##                                        0.033980583 
+##                    Charleston-North Charleston, SC 
+##                                        0.034482759 
+##                                          Akron, OH 
+##                                        0.034934498 
+##                                 Oshkosh-Neenah, WI 
+##                                        0.035294118 
+##                              Birmingham-Hoover, AL 
+##                                        0.035714286 
+##                                     Pittsburgh, PA 
+##                                        0.035714286 
+##                       Huntington-Ashland, WV-KY-OH 
+##                                        0.036585366 
+##                                   Lake Charles, LA 
+##                                        0.037037037 
+##                                         Bangor, ME 
+##                                        0.038461538 
+##                            Holland-Grand Haven, MI 
+##                                        0.038461538 
+##                                   Johnson City, TN 
+##                                        0.038461538 
+##                                       Santa Fe, NM 
+##                                        0.038461538 
+##                                     Montgomery, AL 
+##                                        0.038834951 
+##                            Harrisburg-Carlisle, PA 
+##                                        0.040229885 
+##                                    Sioux Falls, SD 
+##                                        0.040609137 
+##                                   St. Louis, MO-IL 
+##                                        0.040794979 
+##                                       Lawrence, KS 
+##                                        0.040816327 
+##                                     Binghamton, NY 
+##                                        0.041095890 
+##                                      Lynchburg, VA 
+##                                        0.041095890 
+##         Virginia Beach-Norfolk-Newport News, VA-NC 
+##                                        0.041876047 
+##                                     Huntsville, AL 
+##                                        0.042735043 
+##                                    Springfield, MO 
+##                                        0.043478261 
+##                                      La Crosse, WI 
+##                                        0.043859649 
+##                                       Rockford, IL 
+##                                        0.043859649 
+##                                         Topeka, KS 
+##                                        0.043956044 
+##                  Little Rock-North Little Rock, AR 
+##                                        0.044554455 
+##                           Waterloo-Cedar Falls, IA 
+##                                        0.044871795 
+##                             Eugene-Springfield, OR 
+##                                        0.045918367 
+##                              Lexington-Fayette, KY 
+##                                        0.045918367 
+##                               Kankakee-Bradley, IL 
+##                                        0.045977011 
+##                      Hagerstown-Martinsburg, MD-WV 
+##                                        0.046511628 
+##                                    Tallahassee, FL 
+##                                        0.046511628 
+##                                     Farmington, NM 
+##                                        0.046875000 
+##                                       Anderson, IN 
+##                                        0.048387097 
+##                                    Baton Rouge, LA 
+##                                        0.049618321 
+##                          Scranton-Wilkes Barre, PA 
+##                                        0.051136364 
+##                                         Lawton, OK 
+##                                        0.051546392 
+##                             Rochester-Dover, NH-ME 
+##                                        0.053435115 
+##                                         Peoria, IL 
+##                                        0.053571429 
+##                               Colorado Springs, CO 
+##                                        0.053763441 
+##                                          Dover, DE 
+##                                        0.054824561 
+##                                     Provo-Orem, UT 
+##                                        0.055016181 
+##                                        Greeley, CO 
+##                                        0.055555556 
+##                                       Prescott, AZ 
+##                                        0.055555556 
+##                     Pensacola-Ferry Pass-Brent, FL 
+##                                        0.056074766 
+##                                       Amarillo, TX 
+##                                        0.056818182 
+##                      Sarasota-Bradenton-Venice, FL 
+##                                        0.057291667 
+##                               Champaign-Urbana, IL 
+##                                        0.057377049 
+##                                           Erie, PA 
+##                                        0.057471264 
+##                                       Kingston, NY 
+##                                        0.057471264 
+##                                       Fargo, ND-MN 
+##                                        0.058411215 
+##                        Omaha-Council Bluffs, NE-IA 
+##                                        0.058761805 
+##                                  Coeur d'Alene, ID 
+##                                        0.059829060 
+##                   Leominster-Fitchburg-Gardner, MA 
+##                                        0.060606061 
+##                         Santa-Cruz-Watsonville, CA 
+##                                        0.060606061 
+##                                       Richmond, VA 
+##                                        0.061224490 
+##                                   Indianapolis, IN 
+##                                        0.061403509 
+##                                Gulfport-Biloxi, MS 
+##                                        0.061538462 
+##                     Augusta-Richmond County, GA-SC 
+##                                        0.062111801 
+##                                        Decatur, Al 
+##                                        0.062500000 
+##                                   Jacksonville, NC 
+##                                        0.063492063 
+##                               Boise City-Nampa, ID 
+##                                        0.063664596 
+##                        Cleveland-Elyria-Mentor, OH 
+##                                        0.064610866 
+##                    Burlington-South Burlington, VT 
+##                                        0.064914992 
+##                           Grand Rapids-Wyoming, MI 
+##                                        0.065789474 
+##                                     Fort Wayne, IN 
+##                                        0.066176471 
+##                                  Fort Smith, AR-OK 
+##                                        0.066666667 
+##                                       Syracuse, NY 
+##                                        0.067264574 
+##                                  Louisville, KY-IN 
+##                                        0.067829457 
+##                    Cincinnati-Middletown, OH-KY-IN 
+##                                        0.068150209 
+##                                 Corpus Christi, TX 
+##                                        0.068181818 
+##                                      Asheville, NC 
+##                                        0.068965517 
+##                                  Bowling Green, KY 
+##                                        0.068965517 
+##                  Milwaukee-Waukesha-West Allis, WI 
+##                                        0.070028011 
+##                      Hickory-Morgantown-Lenoir, NC 
+##                                        0.070175439 
+##                          Buffalo-Niagara Falls, NY 
+##                                        0.071641791 
+##                                 Chattanooga, TN-GA 
+##                                        0.071856287 
+##                                        Medford, OR 
+##                                        0.073170732 
+##                     Port St. Lucie-Fort Pierce, FL 
+##                                        0.073394495 
+##                               Ogden-Clearfield, UT 
+##                                        0.074162679 
+##                        Portland-South Portland, ME 
+##                                        0.074391989 
+##                              Bloomington-Normal IL 
+##                                        0.075000000 
+##                        Shreveport-Bossier City, LA 
+##                                        0.075342466 
+##                           Lansing-East Lansing, MI 
+##                                        0.075630252 
+##                                      Iowa City, IA 
+##                                        0.076335878 
+##                                  Memphis, TN-MS-AR 
+##                                        0.077586207 
+##                         Muskegon-Norton Shores, MI 
+##                                        0.077777778 
+##                                   Fayetteville, NC 
+##                                        0.077922078 
+##                                  Winston-Salem, NC 
+##                                        0.078740157 
+##                                    Springfield, IL 
+##                                        0.078947368 
+##                           Bremerton-Silverdale, WA 
+##                                        0.080459770 
+##                                          Tulsa, OK 
+##                                        0.080495356 
+##                                    Spartanburg, SC 
+##                                        0.080808081 
+##                        Albany-Schenectady-Troy, NY 
+##                                        0.082089552 
+##                  Palm Bay-Melbourne-Titusville, FL 
+##                                        0.083832335 
+##                     Youngstown-Warren-Boardman, OH 
+##                                        0.084967320 
+##                                       Columbus, OH 
+##                                        0.086080586 
+##                    New Orleans-Metairie-Kenner, LA 
+##                                        0.087193460 
+##                                     Vero Beach, FL 
+##                                        0.088607595 
+##                                     Des Moines, IA 
+##                                        0.089820359 
+##                           Beaumont-Port Author, TX 
+##                                        0.090163934 
+##                                 Kansas City, MO-KS 
+##                                        0.090436590 
+##                                        Madison, WI 
+##                                        0.091549296 
+##                                         Yakima, WA 
+##                                        0.091743119 
+##                                       Columbia, SC 
+##                                        0.092783505 
+##                                Barnstable Town, MA 
+##                                        0.093333333 
+##                                     Las Cruses, NM 
+##                                        0.093457944 
+##                                  Oklahoma City, OK 
+##                                        0.094370861 
+##                Nashville-Davidson-Murfreesboro, TN 
+##                                        0.094758065 
+##                                        Wichita, KS 
+##                                        0.096018735 
+##                                Anniston-Oxford, AL 
+##                                        0.098360656 
+##                                     Greenville, SC 
+##                                        0.098360656 
+##                          Greensboro-High Point, NC 
+##                                        0.099601594 
+##                                          Chico, CA 
+##                                        0.100000000 
+##                                          Salem, OR 
+##                                        0.100000000 
+##                                    Albuquerque, NM 
+##                                        0.100164204 
+##                          Lakeland-Winter Haven, FL 
+##                                        0.100671141 
+##                                      New Haven, CT 
+##                                        0.100790514 
+##                                        Spokane, WA 
+##                                        0.102564103 
+##                  Charlotte-Gastonia-Concord, NC-SC 
+##                                        0.104448743 
+##           Philadelphia-Camden-Wilmington, PA-NJ-DE 
+##                                        0.105853488 
+##                            Athens-Clark County, GA 
+##                                        0.107692308 
+##                            Santa Rosa-Petaluma, CA 
+##                                        0.108527132 
+##                                         Durham, NC 
+##                                        0.111111111 
+##             Minneapolis-St Paul-Bloomington, MN-WI 
+##                                        0.111971104 
+##                                     Utica-Rome, NY 
+##                                        0.112500000 
+##             Deltona-Daytona Beach-Ormond Beach, FL 
+##                                        0.114285714 
+##                                    Gainesville, FL 
+##                                        0.114285714 
+##                                   Jacksonville, FL 
+##                                        0.114503817 
+##                                     Tuscaloosa, AL 
+##                                        0.115384615 
+##                                 Springfield, MA-CT 
+##                                        0.116129032 
+##                    San Luis Obispo-Paso Robles, CA 
+##                                        0.116883117 
+##                                      Ann Arbor, MI 
+##                                        0.117647059 
+##                                        Midland, TX 
+##                                        0.117647059 
+##                          Norwich-New London, CT-RI 
+##                                        0.118226601 
+##               Poughkeepsie-Newburgh-Middletown, NY 
+##                                        0.119402985 
+##                               Baltimore-Towson, MD 
+##                                        0.120189061 
+##                  Allentown-Bethlehem-Easton, PA-NJ 
+##                                        0.122754491 
+##             Fort Walton Beach-Crestview-Destin, FL 
+##                                        0.125000000 
+##                                      Green Bay, WI 
+##                                        0.125000000 
+##                                   Raleigh-Cary, NC 
+##                                        0.125000000 
+##                                           Waco, TX 
+##                                        0.126582278 
+##                                      Lancaster, PA 
+##                                        0.128205128 
+##                     Boston-Cambridge-Quincy, MA-NH 
+##                                        0.128757290 
+##                                 Salt Lake City, UT 
+##                                        0.128808864 
+##                                         Tucson, AZ 
+##                                        0.129139073 
+##                                      Rochester, NY 
+##                                        0.130293160 
+##                         Detroit-Warren-Livonia, MI 
+##                                        0.130723781 
+##                                          Ocala, FL 
+##                                        0.131578947 
+##                Portland-Vancouver-Beaverton, OR-WA 
+##                                        0.136029412 
+##                                  Denver-Aurora, CO 
+##                                        0.136303191 
+##              Fayetteville-Springdale-Rogers, AR-MO 
+##                                        0.138095238 
+##                                        Boulder, CO 
+##                                        0.140350877 
+##                                         Madera, CA 
+##                                        0.140350877 
+##                                  Warner Robins, GA 
+##                                        0.142857143 
+##                                    San Antonio, TX 
+##                                        0.144975288 
+##                                    Punta Gorda, FL 
+##                                        0.145833333 
+##                 Atlanta-Sandy Springs-Marietta, GA 
+##                                        0.146278317 
+##                                      St. Cloud, MN 
+##                                        0.146341463 
+##                                           Napa, CA 
+##                                        0.147540984 
+##                   Vineland-Millville-Bridgeton, NJ 
+##                                        0.148148148 
+##               Providence-Fall River-Warwick, MA-RI 
+##                                        0.148880105 
+##                        Phoenix-Mesa-Scottsdale, AZ 
+##                                        0.152420185 
+##                                   Worcester, MA-CT 
+##                                        0.152777778 
+##                              Austin-Round Rock, TX 
+##                                        0.155038760 
+##           Hartford-West Hartford-East Hartford, CT 
+##                                        0.161581921 
+##                Tampa-St. Petersburg-Clearwater, FL 
+##                                        0.166468490 
+##                Chicago-Naperville-Joliet, IN-IN-WI 
+##                                        0.166787004 
+##                                  Atlantic City, NJ 
+##                                        0.171171171 
+##                        Seattle-Tacoma-Bellevue, WA 
+##                                        0.173982442 
+##               Santa Barbara-Santa Maria-Goleta, CA 
+##                                        0.174242424 
+##                                        Reading, PA 
+##                                        0.176056338 
+##                                        Orlando, FL 
+##                                        0.177049180 
+##                    Dallas-Fort Worth-Arlington, TX 
+##                                        0.180010747 
+##                              Vallejo-Fairfield, CA 
+##                                        0.180451128 
+##                                        Olympia, WA 
+##                                        0.181818182 
+##                   Oxnard-Thousand Oaks-Ventura, CA 
+##                                        0.183520599 
+##                                        Modesto, CA 
+##                                        0.183544304 
+##                                    Reno-Sparks, NV 
+##                                        0.187096774 
+##                       Killeen-Temple-Fort Hood, TX 
+##                                        0.188118812 
+##                                         Fresno, CA 
+##                                        0.198019802 
+##                                       Honolulu, HI 
+##                                        0.200000000 
+##                             Las Vegas-Paradise, NV 
+##                                        0.200617284 
+##                                      Waterbury, CT 
+##                                        0.203821656 
+##              Sacramento-Arden-Arcade-Roseville, CA 
+##                                        0.203898051 
+##                     Houston-Baytown-Sugar Land, TX 
+##                                        0.207443563 
+##       Washington-Arlington-Alexandria, DC-VA-MD-WV 
+##                                        0.210980580 
+##                            Visalia-Porterville, CA 
+##                                        0.214876033 
+##                                       Longview, TX 
+##                                        0.215384615 
+##                       Riverside-San Bernardino, CA 
+##                                        0.217829457 
+##                    Bridgeport-Stamford-Norwalk, CT 
+##                                        0.220082531 
+##                                    Columbus, GA-AL 
+##                                        0.220338983 
+##                                         Merced, CA 
+##                                        0.226415094 
+##                            Naples-Marco Island, FL 
+##                                        0.243902439 
+##                                    Bakersfield, CA 
+##                                        0.248979592 
+##                  San Diego-Carlsbad-San Marcos, CA 
+##                                        0.256890849 
+##                         McAllen-Edinburg-Pharr, TX 
+##                                        0.266666667 
+##                                        Salinas, CA 
+##                                        0.269230769 
+##                                        Danbury, CT 
+##                                        0.279279279 
+##                  San Francisco-Oakland-Fremont, CA 
+##                                        0.293352601 
+## New York-Northern New Jersey-Long Island, NY-NJ-PA 
+##                                        0.308660252 
+##                                       Stockton, CA 
+##                                        0.310880829 
+##                                         Laredo, TX 
+##                                        0.314606742 
+##                                        El Paso, TX 
+##                                        0.315573770 
+##                                  Trenton-Ewing, NJ 
+##                                        0.318681319 
+##                 San Jose-Sunnyvale-Santa Clara, CA 
+##                                        0.329850746 
+##                                      El Centro, CA 
+##                                        0.333333333 
+##               Los Angeles-Long Beach-Santa Ana, CA 
+##                                        0.334878049 
+##                          Cape Coral-Fort Myers, FL 
+##                                        0.349315068 
+##                          Brownsville-Harlingen, TX 
+##                                        0.392405063 
+##              Miami-Fort Lauderdale-Miami Beach, FL 
+##                                        0.409909910
+```
+
+```r
+print(India_by_MetroArea_arr <- 
+    sort(tapply(entity_df$Country == "India", entity_df$MetroArea, sum, na.rm=TRUE)))
+```
+
+```
+##                                          Akron, OH 
+##                                                  0 
+##                        Albany-Schenectady-Troy, NY 
+##                                                  0 
+##                                         Albany, GA 
+##                                                  0 
+##                  Allentown-Bethlehem-Easton, PA-NJ 
+##                                                  0 
+##                                        Altoona, PA 
+##                                                  0 
+##                                       Amarillo, TX 
+##                                                  0 
+##                                       Anderson, IN 
+##                                                  0 
+##                                      Ann Arbor, MI 
+##                                                  0 
+##                                Anniston-Oxford, AL 
+##                                                  0 
+##                                        Appleton,WI 
+##                                                  0 
+##                                      Asheville, NC 
+##                                                  0 
+##                            Athens-Clark County, GA 
+##                                                  0 
+##                     Augusta-Richmond County, GA-SC 
+##                                                  0 
+##                                         Bangor, ME 
+##                                                  0 
+##                                Barnstable Town, MA 
+##                                                  0 
+##                                    Baton Rouge, LA 
+##                                                  0 
+##                           Beaumont-Port Author, TX 
+##                                                  0 
+##                                     Bellingham, WA 
+##                                                  0 
+##                                           Bend, OR 
+##                                                  0 
+##                                       Billings, MT 
+##                                                  0 
+##                                     Binghamton, NY 
+##                                                  0 
+##                                    Bloomington, IN 
+##                                                  0 
+##                                        Boulder, CO 
+##                                                  0 
+##                                  Bowling Green, KY 
+##                                                  0 
+##                           Bremerton-Silverdale, WA 
+##                                                  0 
+##                          Buffalo-Niagara Falls, NY 
+##                                                  0 
+##                               Canton-Massillon, OH 
+##                                                  0 
+##                          Cape Coral-Fort Myers, FL 
+##                                                  0 
+##                                   Cedar Rapids, IA 
+##                                                  0 
+##                               Champaign-Urbana, IL 
+##                                                  0 
+##                                     Charleston, WV 
+##                                                  0 
+##                                 Chattanooga, TN-GA 
+##                                                  0 
+##                                          Chico, CA 
+##                                                  0 
+##                                  Coeur d'Alene, ID 
+##                                                  0 
+##                               Colorado Springs, CO 
+##                                                  0 
+##                                       Columbia, MO 
+##                                                  0 
+##                                    Columbus, GA-AL 
+##                                                  0 
+##                                       Columbus, OH 
+##                                                  0 
+##                                 Corpus Christi, TX 
+##                                                  0 
+##                                        Danbury, CT 
+##                                                  0 
+##                Davenport-Moline-Rock Island, IA-IL 
+##                                                  0 
+##                                         Dayton, OH 
+##                                                  0 
+##                                        Decatur, Al 
+##                                                  0 
+##                                        Decatur, IL 
+##                                                  0 
+##                                  Denver-Aurora, CO 
+##                                                  0 
+##                                          Dover, DE 
+##                                                  0 
+##                                      Duluth, MN-WI 
+##                                                  0 
+##                                         Durham, NC 
+##                                                  0 
+##                                     Eau Claire, WI 
+##                                                  0 
+##                                      El Centro, CA 
+##                                                  0 
+##                                        El Paso, TX 
+##                                                  0 
+##                                           Erie, PA 
+##                                                  0 
+##                             Eugene-Springfield, OR 
+##                                                  0 
+##                                  Evansville, IN-KY 
+##                                                  0 
+##                                       Fargo, ND-MN 
+##                                                  0 
+##                                     Farmington, NM 
+##                                                  0 
+##                                   Fayetteville, NC 
+##                                                  0 
+##                                          Flint, MI 
+##                                                  0 
+##                                       Florence, AL 
+##                                                  0 
+##                          Fort Collins-Loveland, CO 
+##                                                  0 
+##                                  Fort Smith, AR-OK 
+##                                                  0 
+##             Fort Walton Beach-Crestview-Destin, FL 
+##                                                  0 
+##                                    Gainesville, FL 
+##                                                  0 
+##                           Grand Rapids-Wyoming, MI 
+##                                                  0 
+##                                        Greeley, CO 
+##                                                  0 
+##                                      Green Bay, WI 
+##                                                  0 
+##                          Greensboro-High Point, NC 
+##                                                  0 
+##                                Gulfport-Biloxi, MS 
+##                                                  0 
+##                      Hagerstown-Martinsburg, MD-WV 
+##                                                  0 
+##                                   Harrisonburg, VA 
+##                                                  0 
+##                      Hickory-Morgantown-Lenoir, NC 
+##                                                  0 
+##                            Holland-Grand Haven, MI 
+##                                                  0 
+##                       Huntington-Ashland, WV-KY-OH 
+##                                                  0 
+##                                     Huntsville, AL 
+##                                                  0 
+##                                        Jackson, MI 
+##                                                  0 
+##                                        Jackson, MS 
+##                                                  0 
+##                                   Jacksonville, NC 
+##                                                  0 
+##                                     Janesville, WI 
+##                                                  0 
+##                                   Johnson City, TN 
+##                                                  0 
+##                                      Johnstown, PA 
+##                                                  0 
+##                                         Joplin, MO 
+##                                                  0 
+##                              Kalamazoo-Portage, MI 
+##                                                  0 
+##                               Kankakee-Bradley, IL 
+##                                                  0 
+##                       Killeen-Temple-Fort Hood, TX 
+##                                                  0 
+##                           Kingsport-Bristol, TN-VA 
+##                                                  0 
+##                                       Kingston, NY 
+##                                                  0 
+##                                      Knoxville, TN 
+##                                                  0 
+##                                      La Crosse, WI 
+##                                                  0 
+##                                      Lafayette, LA 
+##                                                  0 
+##                                   Lake Charles, LA 
+##                                                  0 
+##                          Lakeland-Winter Haven, FL 
+##                                                  0 
+##                                      Lancaster, PA 
+##                                                  0 
+##                           Lansing-East Lansing, MI 
+##                                                  0 
+##                                         Laredo, TX 
+##                                                  0 
+##                                     Las Cruses, NM 
+##                                                  0 
+##                                         Lawton, OK 
+##                                                  0 
+##                   Leominster-Fitchburg-Gardner, MA 
+##                                                  0 
+##                              Lexington-Fayette, KY 
+##                                                  0 
+##                                       Longview, TX 
+##                                                  0 
+##                                  Louisville, KY-IN 
+##                                                  0 
+##                                        Lubbock, TX 
+##                                                  0 
+##                                      Lynchburg, VA 
+##                                                  0 
+##                                          Macon, GA 
+##                                                  0 
+##                                         Madera, CA 
+##                                                  0 
+##                         McAllen-Edinburg-Pharr, TX 
+##                                                  0 
+##                                        Medford, OR 
+##                                                  0 
+##                                         Merced, CA 
+##                                                  0 
+##                         Michigan City-La Porte, IN 
+##                                                  0 
+##                                        Midland, TX 
+##                                                  0 
+##                                         Mobile, AL 
+##                                                  0 
+##                                        Modesto, CA 
+##                                                  0 
+##                                         Monroe, LA 
+##                                                  0 
+##                                         Monroe, MI 
+##                                                  0 
+##                                     Montgomery, AL 
+##                                                  0 
+##                         Muskegon-Norton Shores, MI 
+##                                                  0 
+##         Myrtle Beach-Conway-North Myrtle Beach, SC 
+##                                                  0 
+##                                           Napa, CA 
+##                                                  0 
+##                            Niles-Benton Harbor, MI 
+##                                                  0 
+##                                          Ocala, FL 
+##                                                  0 
+##                                     Ocean City, NJ 
+##                                                  0 
+##                                 Oshkosh-Neenah, WI 
+##                                                  0 
+##                  Palm Bay-Melbourne-Titusville, FL 
+##                                                  0 
+##                         Panama City-Lynn Haven, FL 
+##                                                  0 
+##                     Pensacola-Ferry Pass-Brent, FL 
+##                                                  0 
+##                     Port St. Lucie-Fort Pierce, FL 
+##                                                  0 
+##                        Portland-South Portland, ME 
+##                                                  0 
+##               Poughkeepsie-Newburgh-Middletown, NY 
+##                                                  0 
+##                                       Prescott, AZ 
+##                                                  0 
+##                                         Pueblo, CO 
+##                                                  0 
+##                                    Punta Gorda, FL 
+##                                                  0 
+##                                         Racine, WI 
+##                                                  0 
+##                                   Raleigh-Cary, NC 
+##                                                  0 
+##                                        Reading, PA 
+##                                                  0 
+##                                       Richmond, VA 
+##                                                  0 
+##                       Riverside-San Bernardino, CA 
+##                                                  0 
+##                                        Roanoke, VA 
+##                                                  0 
+##                                       Rockford, IL 
+##                                                  0 
+##                 Saginaw-Saginaw Township North, MI 
+##                                                  0 
+##                                          Salem, OR 
+##                                                  0 
+##                                        Salinas, CA 
+##                                                  0 
+##                                      Salisbury, MD 
+##                                                  0 
+##                                    San Antonio, TX 
+##                                                  0 
+##                    San Luis Obispo-Paso Robles, CA 
+##                                                  0 
+##               Santa Barbara-Santa Maria-Goleta, CA 
+##                                                  0 
+##                                       Santa Fe, NM 
+##                                                  0 
+##                            Santa Rosa-Petaluma, CA 
+##                                                  0 
+##                         Santa-Cruz-Watsonville, CA 
+##                                                  0 
+##                      Sarasota-Bradenton-Venice, FL 
+##                                                  0 
+##                                       Savannah, GA 
+##                                                  0 
+##                          Scranton-Wilkes Barre, PA 
+##                                                  0 
+##                        Shreveport-Bossier City, LA 
+##                                                  0 
+##                                    Sioux Falls, SD 
+##                                                  0 
+##                        South Bend-Mishawaka, IN-MI 
+##                                                  0 
+##                                    Spartanburg, SC 
+##                                                  0 
+##                                        Spokane, WA 
+##                                                  0 
+##                                 Springfield, MA-CT 
+##                                                  0 
+##                                    Springfield, MO 
+##                                                  0 
+##                                    Springfield, OH 
+##                                                  0 
+##                                      St. Cloud, MN 
+##                                                  0 
+##                                   St. Louis, MO-IL 
+##                                                  0 
+##                                       Stockton, CA 
+##                                                  0 
+##                                    Tallahassee, FL 
+##                                                  0 
+##                                         Toledo, OH 
+##                                                  0 
+##                                         Topeka, KS 
+##                                                  0 
+##                                     Tuscaloosa, AL 
+##                                                  0 
+##                                     Utica-Rome, NY 
+##                                                  0 
+##                                       Valdosta, GA 
+##                                                  0 
+##                              Vallejo-Fairfield, CA 
+##                                                  0 
+##                                     Vero Beach, FL 
+##                                                  0 
+##                                       Victoria, TX 
+##                                                  0 
+##                   Vineland-Millville-Bridgeton, NJ 
+##                                                  0 
+##         Virginia Beach-Norfolk-Newport News, VA-NC 
+##                                                  0 
+##                                           Waco, TX 
+##                                                  0 
+##                                      Waterbury, CT 
+##                                                  0 
+##                           Waterloo-Cedar Falls, IA 
+##                                                  0 
+##                                         Wausau, WI 
+##                                                  0 
+##                                        Wichita, KS 
+##                                                  0 
+##                                   Worcester, MA-CT 
+##                                                  0 
+##                                         Yakima, WA 
+##                                                  0 
+##                                   York-Hanover, PA 
+##                                                  0 
+##                     Youngstown-Warren-Boardman, OH 
+##                                                  0 
+##                                       Anderson, SC 
+##                                                  1 
+##                              Bloomington-Normal IL 
+##                                                  1 
+##                               Boise City-Nampa, ID 
+##                                                  1 
+##                    Cincinnati-Middletown, OH-KY-IN 
+##                                                  1 
+##                                       Columbia, SC 
+##                                                  1 
+##                                     Greenville, SC 
+##                                                  1 
+##                            Harrisburg-Carlisle, PA 
+##                                                  1 
+##                                   Jacksonville, FL 
+##                                                  1 
+##                                       Lawrence, KS 
+##                                                  1 
+##                            Naples-Marco Island, FL 
+##                                                  1 
+##                    New Orleans-Metairie-Kenner, LA 
+##                                                  1 
+##                                        Olympia, WA 
+##                                                  1 
+##                                     Provo-Orem, UT 
+##                                                  1 
+##                                       Syracuse, NY 
+##                                                  1 
+##                                         Tucson, AZ 
+##                                                  1 
+##                                  Atlantic City, NJ 
+##                                                  2 
+##                                    Bakersfield, CA 
+##                                                  2 
+##                              Birmingham-Hoover, AL 
+##                                                  2 
+##                    Burlington-South Burlington, VT 
+##                                                  2 
+##                    Charleston-North Charleston, SC 
+##                                                  2 
+##                        Cleveland-Elyria-Mentor, OH 
+##                                                  2 
+##             Deltona-Daytona Beach-Ormond Beach, FL 
+##                                                  2 
+##                                     Fort Wayne, IN 
+##                                                  2 
+##                             Las Vegas-Paradise, NV 
+##                                                  2 
+##                                  Memphis, TN-MS-AR 
+##                                                  2 
+##              Miami-Fort Lauderdale-Miami Beach, FL 
+##                                                  2 
+##                Nashville-Davidson-Murfreesboro, TN 
+##                                                  2 
+##                               Ogden-Clearfield, UT 
+##                                                  2 
+##                                  Oklahoma City, OK 
+##                                                  2 
+##                   Oxnard-Thousand Oaks-Ventura, CA 
+##                                                  2 
+##                        Phoenix-Mesa-Scottsdale, AZ 
+##                                                  2 
+##                                      Rochester, NY 
+##                                                  2 
+##                                 Salt Lake City, UT 
+##                                                  2 
+##                                    Springfield, IL 
+##                                                  2 
+##                                  Winston-Salem, NC 
+##                                                  2 
+##                                    Albuquerque, NM 
+##                                                  3 
+##                                      Iowa City, IA 
+##                                                  3 
+##                                        Madison, WI 
+##                                                  3 
+##                          Norwich-New London, CT-RI 
+##                                                  3 
+##                                    Reno-Sparks, NV 
+##                                                  3 
+##                            Visalia-Porterville, CA 
+##                                                  3 
+##                  Charlotte-Gastonia-Concord, NC-SC 
+##                                                  4 
+##                                   Indianapolis, IN 
+##                                                  4 
+##                        Omaha-Council Bluffs, NE-IA 
+##                                                  4 
+##                                         Peoria, IL 
+##                                                  4 
+##                             Rochester-Dover, NH-ME 
+##                                                  4 
+##                  San Diego-Carlsbad-San Marcos, CA 
+##                                                  4 
+##                                  Trenton-Ewing, NJ 
+##                                                  4 
+##                                          Tulsa, OK 
+##                                                  4 
+##                                        Orlando, FL 
+##                                                  5 
+##                        Seattle-Tacoma-Bellevue, WA 
+##                                                  5 
+##                              Austin-Round Rock, TX 
+##                                                  6 
+##                          Brownsville-Harlingen, TX 
+##                                                  6 
+##                                     Des Moines, IA 
+##                                                  6 
+##                  Little Rock-North Little Rock, AR 
+##                                                  6 
+##                                      New Haven, CT 
+##                                                  6 
+##                Portland-Vancouver-Beaverton, OR-WA 
+##                                                  6 
+##                                  Warner Robins, GA 
+##                                                  6 
+##                Tampa-St. Petersburg-Clearwater, FL 
+##                                                  7 
+##              Fayetteville-Springdale-Rogers, AR-MO 
+##                                                  8 
+##              Sacramento-Arden-Arcade-Roseville, CA 
+##                                                  8 
+##                                       Honolulu, HI 
+##                                                  9 
+##                     Boston-Cambridge-Quincy, MA-NH 
+##                                                 11 
+##                                 Kansas City, MO-KS 
+##                                                 11 
+##                    Bridgeport-Stamford-Norwalk, CT 
+##                                                 12 
+##                  Milwaukee-Waukesha-West Allis, WI 
+##                                                 12 
+##               Providence-Fall River-Warwick, MA-RI 
+##                                                 14 
+##                     Houston-Baytown-Sugar Land, TX 
+##                                                 15 
+##                               Baltimore-Towson, MD 
+##                                                 16 
+##                                         Fresno, CA 
+##                                                 16 
+##                                     Pittsburgh, PA 
+##                                                 16 
+##                    Dallas-Fort Worth-Arlington, TX 
+##                                                 18 
+##               Los Angeles-Long Beach-Santa Ana, CA 
+##                                                 19 
+##                 San Jose-Sunnyvale-Santa Clara, CA 
+##                                                 19 
+##             Minneapolis-St Paul-Bloomington, MN-WI 
+##                                                 23 
+##           Hartford-West Hartford-East Hartford, CT 
+##                                                 26 
+##                 Atlanta-Sandy Springs-Marietta, GA 
+##                                                 27 
+##                  San Francisco-Oakland-Fremont, CA 
+##                                                 27 
+##                         Detroit-Warren-Livonia, MI 
+##                                                 30 
+##                Chicago-Naperville-Joliet, IN-IN-WI 
+##                                                 31 
+##           Philadelphia-Camden-Wilmington, PA-NJ-DE 
+##                                                 32 
+##       Washington-Arlington-Alexandria, DC-VA-MD-WV 
+##                                                 50 
+## New York-Northern New Jersey-Long Island, NY-NJ-PA 
+##                                                 96
+```
+
+```r
+print(Brazil_by_MetroArea_arr <- 
+    sort(tapply(entity_df$Country == "Brazil", entity_df$MetroArea, sum, na.rm=TRUE)))
+```
+
+```
+##                        Albany-Schenectady-Troy, NY 
+##                                                  0 
+##                                         Albany, GA 
+##                                                  0 
+##                  Allentown-Bethlehem-Easton, PA-NJ 
+##                                                  0 
+##                                        Altoona, PA 
+##                                                  0 
+##                                       Amarillo, TX 
+##                                                  0 
+##                                       Anderson, IN 
+##                                                  0 
+##                                       Anderson, SC 
+##                                                  0 
+##                                      Ann Arbor, MI 
+##                                                  0 
+##                                Anniston-Oxford, AL 
+##                                                  0 
+##                                        Appleton,WI 
+##                                                  0 
+##                                      Asheville, NC 
+##                                                  0 
+##                            Athens-Clark County, GA 
+##                                                  0 
+##                                  Atlantic City, NJ 
+##                                                  0 
+##                     Augusta-Richmond County, GA-SC 
+##                                                  0 
+##                              Austin-Round Rock, TX 
+##                                                  0 
+##                                    Bakersfield, CA 
+##                                                  0 
+##                               Baltimore-Towson, MD 
+##                                                  0 
+##                                         Bangor, ME 
+##                                                  0 
+##                                    Baton Rouge, LA 
+##                                                  0 
+##                           Beaumont-Port Author, TX 
+##                                                  0 
+##                                     Bellingham, WA 
+##                                                  0 
+##                                           Bend, OR 
+##                                                  0 
+##                                       Billings, MT 
+##                                                  0 
+##                                     Binghamton, NY 
+##                                                  0 
+##                              Birmingham-Hoover, AL 
+##                                                  0 
+##                              Bloomington-Normal IL 
+##                                                  0 
+##                                    Bloomington, IN 
+##                                                  0 
+##                               Boise City-Nampa, ID 
+##                                                  0 
+##                                        Boulder, CO 
+##                                                  0 
+##                                  Bowling Green, KY 
+##                                                  0 
+##                          Brownsville-Harlingen, TX 
+##                                                  0 
+##                          Buffalo-Niagara Falls, NY 
+##                                                  0 
+##                    Burlington-South Burlington, VT 
+##                                                  0 
+##                                   Cedar Rapids, IA 
+##                                                  0 
+##                               Champaign-Urbana, IL 
+##                                                  0 
+##                    Charleston-North Charleston, SC 
+##                                                  0 
+##                                     Charleston, WV 
+##                                                  0 
+##                                 Chattanooga, TN-GA 
+##                                                  0 
+##                        Cleveland-Elyria-Mentor, OH 
+##                                                  0 
+##                                  Coeur d'Alene, ID 
+##                                                  0 
+##                               Colorado Springs, CO 
+##                                                  0 
+##                                       Columbia, MO 
+##                                                  0 
+##                                    Columbus, GA-AL 
+##                                                  0 
+##                                       Columbus, OH 
+##                                                  0 
+##                                 Corpus Christi, TX 
+##                                                  0 
+##                                         Dayton, OH 
+##                                                  0 
+##                                        Decatur, Al 
+##                                                  0 
+##                                        Decatur, IL 
+##                                                  0 
+##             Deltona-Daytona Beach-Ormond Beach, FL 
+##                                                  0 
+##                                     Des Moines, IA 
+##                                                  0 
+##                         Detroit-Warren-Livonia, MI 
+##                                                  0 
+##                                          Dover, DE 
+##                                                  0 
+##                                      Duluth, MN-WI 
+##                                                  0 
+##                                         Durham, NC 
+##                                                  0 
+##                                     Eau Claire, WI 
+##                                                  0 
+##                                      El Centro, CA 
+##                                                  0 
+##                                        El Paso, TX 
+##                                                  0 
+##                                           Erie, PA 
+##                                                  0 
+##                             Eugene-Springfield, OR 
+##                                                  0 
+##                                  Evansville, IN-KY 
+##                                                  0 
+##                                       Fargo, ND-MN 
+##                                                  0 
+##                                     Farmington, NM 
+##                                                  0 
+##              Fayetteville-Springdale-Rogers, AR-MO 
+##                                                  0 
+##                                   Fayetteville, NC 
+##                                                  0 
+##                                          Flint, MI 
+##                                                  0 
+##                                       Florence, AL 
+##                                                  0 
+##                          Fort Collins-Loveland, CO 
+##                                                  0 
+##                                  Fort Smith, AR-OK 
+##                                                  0 
+##             Fort Walton Beach-Crestview-Destin, FL 
+##                                                  0 
+##                                     Fort Wayne, IN 
+##                                                  0 
+##                                         Fresno, CA 
+##                                                  0 
+##                                    Gainesville, FL 
+##                                                  0 
+##                           Grand Rapids-Wyoming, MI 
+##                                                  0 
+##                                        Greeley, CO 
+##                                                  0 
+##                                      Green Bay, WI 
+##                                                  0 
+##                          Greensboro-High Point, NC 
+##                                                  0 
+##                                     Greenville, SC 
+##                                                  0 
+##                                Gulfport-Biloxi, MS 
+##                                                  0 
+##                      Hagerstown-Martinsburg, MD-WV 
+##                                                  0 
+##                            Harrisburg-Carlisle, PA 
+##                                                  0 
+##                                   Harrisonburg, VA 
+##                                                  0 
+##                      Hickory-Morgantown-Lenoir, NC 
+##                                                  0 
+##                            Holland-Grand Haven, MI 
+##                                                  0 
+##                                       Honolulu, HI 
+##                                                  0 
+##                     Houston-Baytown-Sugar Land, TX 
+##                                                  0 
+##                       Huntington-Ashland, WV-KY-OH 
+##                                                  0 
+##                                     Huntsville, AL 
+##                                                  0 
+##                                   Indianapolis, IN 
+##                                                  0 
+##                                      Iowa City, IA 
+##                                                  0 
+##                                        Jackson, MI 
+##                                                  0 
+##                                        Jackson, MS 
+##                                                  0 
+##                                   Jacksonville, NC 
+##                                                  0 
+##                                     Janesville, WI 
+##                                                  0 
+##                                   Johnson City, TN 
+##                                                  0 
+##                                      Johnstown, PA 
+##                                                  0 
+##                                         Joplin, MO 
+##                                                  0 
+##                              Kalamazoo-Portage, MI 
+##                                                  0 
+##                               Kankakee-Bradley, IL 
+##                                                  0 
+##                       Killeen-Temple-Fort Hood, TX 
+##                                                  0 
+##                           Kingsport-Bristol, TN-VA 
+##                                                  0 
+##                                       Kingston, NY 
+##                                                  0 
+##                                      Knoxville, TN 
+##                                                  0 
+##                                      La Crosse, WI 
+##                                                  0 
+##                                      Lafayette, LA 
+##                                                  0 
+##                                   Lake Charles, LA 
+##                                                  0 
+##                          Lakeland-Winter Haven, FL 
+##                                                  0 
+##                                      Lancaster, PA 
+##                                                  0 
+##                           Lansing-East Lansing, MI 
+##                                                  0 
+##                                         Laredo, TX 
+##                                                  0 
+##                                     Las Cruses, NM 
+##                                                  0 
+##                             Las Vegas-Paradise, NV 
+##                                                  0 
+##                                       Lawrence, KS 
+##                                                  0 
+##                                         Lawton, OK 
+##                                                  0 
+##                              Lexington-Fayette, KY 
+##                                                  0 
+##                  Little Rock-North Little Rock, AR 
+##                                                  0 
+##                                       Longview, TX 
+##                                                  0 
+##                                        Lubbock, TX 
+##                                                  0 
+##                                      Lynchburg, VA 
+##                                                  0 
+##                                          Macon, GA 
+##                                                  0 
+##                                         Madera, CA 
+##                                                  0 
+##                                        Madison, WI 
+##                                                  0 
+##                         McAllen-Edinburg-Pharr, TX 
+##                                                  0 
+##                                        Medford, OR 
+##                                                  0 
+##                                  Memphis, TN-MS-AR 
+##                                                  0 
+##                                         Merced, CA 
+##                                                  0 
+##                         Michigan City-La Porte, IN 
+##                                                  0 
+##                                        Midland, TX 
+##                                                  0 
+##                  Milwaukee-Waukesha-West Allis, WI 
+##                                                  0 
+##                                         Mobile, AL 
+##                                                  0 
+##                                        Modesto, CA 
+##                                                  0 
+##                                         Monroe, MI 
+##                                                  0 
+##                         Muskegon-Norton Shores, MI 
+##                                                  0 
+##         Myrtle Beach-Conway-North Myrtle Beach, SC 
+##                                                  0 
+##                                           Napa, CA 
+##                                                  0 
+##                            Naples-Marco Island, FL 
+##                                                  0 
+##                Nashville-Davidson-Murfreesboro, TN 
+##                                                  0 
+##                                      New Haven, CT 
+##                                                  0 
+##                    New Orleans-Metairie-Kenner, LA 
+##                                                  0 
+##                            Niles-Benton Harbor, MI 
+##                                                  0 
+##                          Norwich-New London, CT-RI 
+##                                                  0 
+##                                          Ocala, FL 
+##                                                  0 
+##                                     Ocean City, NJ 
+##                                                  0 
+##                               Ogden-Clearfield, UT 
+##                                                  0 
+##                                  Oklahoma City, OK 
+##                                                  0 
+##                                        Olympia, WA 
+##                                                  0 
+##                        Omaha-Council Bluffs, NE-IA 
+##                                                  0 
+##                                 Oshkosh-Neenah, WI 
+##                                                  0 
+##                  Palm Bay-Melbourne-Titusville, FL 
+##                                                  0 
+##                         Panama City-Lynn Haven, FL 
+##                                                  0 
+##                                         Peoria, IL 
+##                                                  0 
+##                                     Pittsburgh, PA 
+##                                                  0 
+##                     Port St. Lucie-Fort Pierce, FL 
+##                                                  0 
+##                        Portland-South Portland, ME 
+##                                                  0 
+##                Portland-Vancouver-Beaverton, OR-WA 
+##                                                  0 
+##               Poughkeepsie-Newburgh-Middletown, NY 
+##                                                  0 
+##                                       Prescott, AZ 
+##                                                  0 
+##                                     Provo-Orem, UT 
+##                                                  0 
+##                                         Pueblo, CO 
+##                                                  0 
+##                                    Punta Gorda, FL 
+##                                                  0 
+##                                   Raleigh-Cary, NC 
+##                                                  0 
+##                                        Reading, PA 
+##                                                  0 
+##                                    Reno-Sparks, NV 
+##                                                  0 
+##                                       Richmond, VA 
+##                                                  0 
+##                       Riverside-San Bernardino, CA 
+##                                                  0 
+##                                        Roanoke, VA 
+##                                                  0 
+##                             Rochester-Dover, NH-ME 
+##                                                  0 
+##                                       Rockford, IL 
+##                                                  0 
+##                 Saginaw-Saginaw Township North, MI 
+##                                                  0 
+##                                        Salinas, CA 
+##                                                  0 
+##                                      Salisbury, MD 
+##                                                  0 
+##                                    San Antonio, TX 
+##                                                  0 
+##                  San Diego-Carlsbad-San Marcos, CA 
+##                                                  0 
+##                    San Luis Obispo-Paso Robles, CA 
+##                                                  0 
+##               Santa Barbara-Santa Maria-Goleta, CA 
+##                                                  0 
+##                                       Santa Fe, NM 
+##                                                  0 
+##                            Santa Rosa-Petaluma, CA 
+##                                                  0 
+##                         Santa-Cruz-Watsonville, CA 
+##                                                  0 
+##                      Sarasota-Bradenton-Venice, FL 
+##                                                  0 
+##                                       Savannah, GA 
+##                                                  0 
+##                          Scranton-Wilkes Barre, PA 
+##                                                  0 
+##                        Shreveport-Bossier City, LA 
+##                                                  0 
+##                                    Sioux Falls, SD 
+##                                                  0 
+##                        South Bend-Mishawaka, IN-MI 
+##                                                  0 
+##                                    Spartanburg, SC 
+##                                                  0 
+##                                        Spokane, WA 
+##                                                  0 
+##                                    Springfield, IL 
+##                                                  0 
+##                                 Springfield, MA-CT 
+##                                                  0 
+##                                    Springfield, MO 
+##                                                  0 
+##                                    Springfield, OH 
+##                                                  0 
+##                                      St. Cloud, MN 
+##                                                  0 
+##                                   St. Louis, MO-IL 
+##                                                  0 
+##                                       Stockton, CA 
+##                                                  0 
+##                                       Syracuse, NY 
+##                                                  0 
+##                                    Tallahassee, FL 
+##                                                  0 
+##                                         Toledo, OH 
+##                                                  0 
+##                                         Topeka, KS 
+##                                                  0 
+##                                         Tucson, AZ 
+##                                                  0 
+##                                          Tulsa, OK 
+##                                                  0 
+##                                     Tuscaloosa, AL 
+##                                                  0 
+##                                     Utica-Rome, NY 
+##                                                  0 
+##                                       Valdosta, GA 
+##                                                  0 
+##                              Vallejo-Fairfield, CA 
+##                                                  0 
+##                                     Vero Beach, FL 
+##                                                  0 
+##                                       Victoria, TX 
+##                                                  0 
+##                   Vineland-Millville-Bridgeton, NJ 
+##                                                  0 
+##                            Visalia-Porterville, CA 
+##                                                  0 
+##                                           Waco, TX 
+##                                                  0 
+##                                  Warner Robins, GA 
+##                                                  0 
+##                           Waterloo-Cedar Falls, IA 
+##                                                  0 
+##                                         Wausau, WI 
+##                                                  0 
+##                                  Winston-Salem, NC 
+##                                                  0 
+##                                   Worcester, MA-CT 
+##                                                  0 
+##                                         Yakima, WA 
+##                                                  0 
+##                                   York-Hanover, PA 
+##                                                  0 
+##                     Youngstown-Warren-Boardman, OH 
+##                                                  0 
+##                                          Akron, OH 
+##                                                  1 
+##                                    Albuquerque, NM 
+##                                                  1 
+##                 Atlanta-Sandy Springs-Marietta, GA 
+##                                                  1 
+##                           Bremerton-Silverdale, WA 
+##                                                  1 
+##                          Cape Coral-Fort Myers, FL 
+##                                                  1 
+##                                          Chico, CA 
+##                                                  1 
+##                    Cincinnati-Middletown, OH-KY-IN 
+##                                                  1 
+##                                  Denver-Aurora, CO 
+##                                                  1 
+##           Hartford-West Hartford-East Hartford, CT 
+##                                                  1 
+##                                 Kansas City, MO-KS 
+##                                                  1 
+##                   Leominster-Fitchburg-Gardner, MA 
+##                                                  1 
+##                                  Louisville, KY-IN 
+##                                                  1 
+##             Minneapolis-St Paul-Bloomington, MN-WI 
+##                                                  1 
+##                                         Monroe, LA 
+##                                                  1 
+##                                     Montgomery, AL 
+##                                                  1 
+##                   Oxnard-Thousand Oaks-Ventura, CA 
+##                                                  1 
+##                     Pensacola-Ferry Pass-Brent, FL 
+##                                                  1 
+##                                         Racine, WI 
+##                                                  1 
+##                                      Rochester, NY 
+##                                                  1 
+##                                          Salem, OR 
+##                                                  1 
+##                 San Jose-Sunnyvale-Santa Clara, CA 
+##                                                  1 
+##                        Seattle-Tacoma-Bellevue, WA 
+##                                                  1 
+##                Tampa-St. Petersburg-Clearwater, FL 
+##                                                  1 
+##                                  Trenton-Ewing, NJ 
+##                                                  1 
+##         Virginia Beach-Norfolk-Newport News, VA-NC 
+##                                                  1 
+##                                      Waterbury, CT 
+##                                                  1 
+##                                        Wichita, KS 
+##                                                  1 
+##                                Barnstable Town, MA 
+##                                                  2 
+##                  Charlotte-Gastonia-Concord, NC-SC 
+##                                                  2 
+##                Chicago-Naperville-Joliet, IN-IN-WI 
+##                                                  2 
+##                                       Columbia, SC 
+##                                                  2 
+##                    Dallas-Fort Worth-Arlington, TX 
+##                                                  2 
+##                                   Jacksonville, FL 
+##                                                  2 
+##                                        Orlando, FL 
+##                                                  2 
+##              Sacramento-Arden-Arcade-Roseville, CA 
+##                                                  2 
+##                               Canton-Massillon, OH 
+##                                                  3 
+##                        Phoenix-Mesa-Scottsdale, AZ 
+##                                                  3 
+##               Providence-Fall River-Warwick, MA-RI 
+##                                                  3 
+##                                 Salt Lake City, UT 
+##                                                  3 
+##                Davenport-Moline-Rock Island, IA-IL 
+##                                                  4 
+##           Philadelphia-Camden-Wilmington, PA-NJ-DE 
+##                                                  4 
+##                                        Danbury, CT 
+##                                                  5 
+##                  San Francisco-Oakland-Fremont, CA 
+##                                                  6 
+##                    Bridgeport-Stamford-Norwalk, CT 
+##                                                  7 
+## New York-Northern New Jersey-Long Island, NY-NJ-PA 
+##                                                  7 
+##       Washington-Arlington-Alexandria, DC-VA-MD-WV 
+##                                                  8 
+##               Los Angeles-Long Beach-Santa Ana, CA 
+##                                                  9 
+##              Miami-Fort Lauderdale-Miami Beach, FL 
+##                                                 16 
+##                     Boston-Cambridge-Quincy, MA-NH 
+##                                                 18
+```
+
+```r
+print(Somalia_by_MetroArea_arr <- 
+    sort(tapply(entity_df$Country == "Somalia", entity_df$MetroArea, sum, na.rm=TRUE)))
+```
+
+```
+##                                          Akron, OH 
+##                                                  0 
+##                        Albany-Schenectady-Troy, NY 
+##                                                  0 
+##                                         Albany, GA 
+##                                                  0 
+##                                    Albuquerque, NM 
+##                                                  0 
+##                  Allentown-Bethlehem-Easton, PA-NJ 
+##                                                  0 
+##                                        Altoona, PA 
+##                                                  0 
+##                                       Amarillo, TX 
+##                                                  0 
+##                                       Anderson, IN 
+##                                                  0 
+##                                       Anderson, SC 
+##                                                  0 
+##                                      Ann Arbor, MI 
+##                                                  0 
+##                                Anniston-Oxford, AL 
+##                                                  0 
+##                                        Appleton,WI 
+##                                                  0 
+##                                      Asheville, NC 
+##                                                  0 
+##                            Athens-Clark County, GA 
+##                                                  0 
+##                 Atlanta-Sandy Springs-Marietta, GA 
+##                                                  0 
+##                                  Atlantic City, NJ 
+##                                                  0 
+##                     Augusta-Richmond County, GA-SC 
+##                                                  0 
+##                              Austin-Round Rock, TX 
+##                                                  0 
+##                                    Bakersfield, CA 
+##                                                  0 
+##                               Baltimore-Towson, MD 
+##                                                  0 
+##                                         Bangor, ME 
+##                                                  0 
+##                                Barnstable Town, MA 
+##                                                  0 
+##                                    Baton Rouge, LA 
+##                                                  0 
+##                           Beaumont-Port Author, TX 
+##                                                  0 
+##                                     Bellingham, WA 
+##                                                  0 
+##                                           Bend, OR 
+##                                                  0 
+##                                       Billings, MT 
+##                                                  0 
+##                                     Binghamton, NY 
+##                                                  0 
+##                              Birmingham-Hoover, AL 
+##                                                  0 
+##                              Bloomington-Normal IL 
+##                                                  0 
+##                                    Bloomington, IN 
+##                                                  0 
+##                               Boise City-Nampa, ID 
+##                                                  0 
+##                     Boston-Cambridge-Quincy, MA-NH 
+##                                                  0 
+##                                        Boulder, CO 
+##                                                  0 
+##                                  Bowling Green, KY 
+##                                                  0 
+##                           Bremerton-Silverdale, WA 
+##                                                  0 
+##                    Bridgeport-Stamford-Norwalk, CT 
+##                                                  0 
+##                          Brownsville-Harlingen, TX 
+##                                                  0 
+##                          Buffalo-Niagara Falls, NY 
+##                                                  0 
+##                               Canton-Massillon, OH 
+##                                                  0 
+##                          Cape Coral-Fort Myers, FL 
+##                                                  0 
+##                                   Cedar Rapids, IA 
+##                                                  0 
+##                               Champaign-Urbana, IL 
+##                                                  0 
+##                    Charleston-North Charleston, SC 
+##                                                  0 
+##                                     Charleston, WV 
+##                                                  0 
+##                  Charlotte-Gastonia-Concord, NC-SC 
+##                                                  0 
+##                                 Chattanooga, TN-GA 
+##                                                  0 
+##                Chicago-Naperville-Joliet, IN-IN-WI 
+##                                                  0 
+##                                          Chico, CA 
+##                                                  0 
+##                    Cincinnati-Middletown, OH-KY-IN 
+##                                                  0 
+##                        Cleveland-Elyria-Mentor, OH 
+##                                                  0 
+##                                  Coeur d'Alene, ID 
+##                                                  0 
+##                               Colorado Springs, CO 
+##                                                  0 
+##                                       Columbia, MO 
+##                                                  0 
+##                                       Columbia, SC 
+##                                                  0 
+##                                    Columbus, GA-AL 
+##                                                  0 
+##                                 Corpus Christi, TX 
+##                                                  0 
+##                    Dallas-Fort Worth-Arlington, TX 
+##                                                  0 
+##                                        Danbury, CT 
+##                                                  0 
+##                Davenport-Moline-Rock Island, IA-IL 
+##                                                  0 
+##                                        Decatur, Al 
+##                                                  0 
+##                                        Decatur, IL 
+##                                                  0 
+##             Deltona-Daytona Beach-Ormond Beach, FL 
+##                                                  0 
+##                                  Denver-Aurora, CO 
+##                                                  0 
+##                                     Des Moines, IA 
+##                                                  0 
+##                         Detroit-Warren-Livonia, MI 
+##                                                  0 
+##                                          Dover, DE 
+##                                                  0 
+##                                      Duluth, MN-WI 
+##                                                  0 
+##                                         Durham, NC 
+##                                                  0 
+##                                     Eau Claire, WI 
+##                                                  0 
+##                                      El Centro, CA 
+##                                                  0 
+##                                        El Paso, TX 
+##                                                  0 
+##                                           Erie, PA 
+##                                                  0 
+##                             Eugene-Springfield, OR 
+##                                                  0 
+##                                  Evansville, IN-KY 
+##                                                  0 
+##                                     Farmington, NM 
+##                                                  0 
+##              Fayetteville-Springdale-Rogers, AR-MO 
+##                                                  0 
+##                                   Fayetteville, NC 
+##                                                  0 
+##                                          Flint, MI 
+##                                                  0 
+##                                       Florence, AL 
+##                                                  0 
+##                          Fort Collins-Loveland, CO 
+##                                                  0 
+##                                  Fort Smith, AR-OK 
+##                                                  0 
+##             Fort Walton Beach-Crestview-Destin, FL 
+##                                                  0 
+##                                     Fort Wayne, IN 
+##                                                  0 
+##                                         Fresno, CA 
+##                                                  0 
+##                                    Gainesville, FL 
+##                                                  0 
+##                           Grand Rapids-Wyoming, MI 
+##                                                  0 
+##                                        Greeley, CO 
+##                                                  0 
+##                                      Green Bay, WI 
+##                                                  0 
+##                          Greensboro-High Point, NC 
+##                                                  0 
+##                                     Greenville, SC 
+##                                                  0 
+##                                Gulfport-Biloxi, MS 
+##                                                  0 
+##                      Hagerstown-Martinsburg, MD-WV 
+##                                                  0 
+##                            Harrisburg-Carlisle, PA 
+##                                                  0 
+##                                   Harrisonburg, VA 
+##                                                  0 
+##           Hartford-West Hartford-East Hartford, CT 
+##                                                  0 
+##                      Hickory-Morgantown-Lenoir, NC 
+##                                                  0 
+##                            Holland-Grand Haven, MI 
+##                                                  0 
+##                                       Honolulu, HI 
+##                                                  0 
+##                       Huntington-Ashland, WV-KY-OH 
+##                                                  0 
+##                                     Huntsville, AL 
+##                                                  0 
+##                                   Indianapolis, IN 
+##                                                  0 
+##                                      Iowa City, IA 
+##                                                  0 
+##                                        Jackson, MI 
+##                                                  0 
+##                                        Jackson, MS 
+##                                                  0 
+##                                   Jacksonville, FL 
+##                                                  0 
+##                                   Jacksonville, NC 
+##                                                  0 
+##                                     Janesville, WI 
+##                                                  0 
+##                                   Johnson City, TN 
+##                                                  0 
+##                                      Johnstown, PA 
+##                                                  0 
+##                                         Joplin, MO 
+##                                                  0 
+##                              Kalamazoo-Portage, MI 
+##                                                  0 
+##                               Kankakee-Bradley, IL 
+##                                                  0 
+##                                 Kansas City, MO-KS 
+##                                                  0 
+##                       Killeen-Temple-Fort Hood, TX 
+##                                                  0 
+##                           Kingsport-Bristol, TN-VA 
+##                                                  0 
+##                                       Kingston, NY 
+##                                                  0 
+##                                      Knoxville, TN 
+##                                                  0 
+##                                      La Crosse, WI 
+##                                                  0 
+##                                      Lafayette, LA 
+##                                                  0 
+##                                   Lake Charles, LA 
+##                                                  0 
+##                          Lakeland-Winter Haven, FL 
+##                                                  0 
+##                                      Lancaster, PA 
+##                                                  0 
+##                           Lansing-East Lansing, MI 
+##                                                  0 
+##                                         Laredo, TX 
+##                                                  0 
+##                                     Las Cruses, NM 
+##                                                  0 
+##                             Las Vegas-Paradise, NV 
+##                                                  0 
+##                                       Lawrence, KS 
+##                                                  0 
+##                                         Lawton, OK 
+##                                                  0 
+##                   Leominster-Fitchburg-Gardner, MA 
+##                                                  0 
+##                              Lexington-Fayette, KY 
+##                                                  0 
+##                  Little Rock-North Little Rock, AR 
+##                                                  0 
+##                                       Longview, TX 
+##                                                  0 
+##               Los Angeles-Long Beach-Santa Ana, CA 
+##                                                  0 
+##                                  Louisville, KY-IN 
+##                                                  0 
+##                                        Lubbock, TX 
+##                                                  0 
+##                                      Lynchburg, VA 
+##                                                  0 
+##                                          Macon, GA 
+##                                                  0 
+##                                         Madera, CA 
+##                                                  0 
+##                                        Madison, WI 
+##                                                  0 
+##                         McAllen-Edinburg-Pharr, TX 
+##                                                  0 
+##                                        Medford, OR 
+##                                                  0 
+##                                  Memphis, TN-MS-AR 
+##                                                  0 
+##                                         Merced, CA 
+##                                                  0 
+##              Miami-Fort Lauderdale-Miami Beach, FL 
+##                                                  0 
+##                         Michigan City-La Porte, IN 
+##                                                  0 
+##                                        Midland, TX 
+##                                                  0 
+##                  Milwaukee-Waukesha-West Allis, WI 
+##                                                  0 
+##                                         Mobile, AL 
+##                                                  0 
+##                                        Modesto, CA 
+##                                                  0 
+##                                         Monroe, LA 
+##                                                  0 
+##                                         Monroe, MI 
+##                                                  0 
+##                                     Montgomery, AL 
+##                                                  0 
+##                         Muskegon-Norton Shores, MI 
+##                                                  0 
+##         Myrtle Beach-Conway-North Myrtle Beach, SC 
+##                                                  0 
+##                                           Napa, CA 
+##                                                  0 
+##                            Naples-Marco Island, FL 
+##                                                  0 
+##                Nashville-Davidson-Murfreesboro, TN 
+##                                                  0 
+##                                      New Haven, CT 
+##                                                  0 
+##                    New Orleans-Metairie-Kenner, LA 
+##                                                  0 
+## New York-Northern New Jersey-Long Island, NY-NJ-PA 
+##                                                  0 
+##                            Niles-Benton Harbor, MI 
+##                                                  0 
+##                          Norwich-New London, CT-RI 
+##                                                  0 
+##                                          Ocala, FL 
+##                                                  0 
+##                                     Ocean City, NJ 
+##                                                  0 
+##                               Ogden-Clearfield, UT 
+##                                                  0 
+##                                  Oklahoma City, OK 
+##                                                  0 
+##                                        Olympia, WA 
+##                                                  0 
+##                        Omaha-Council Bluffs, NE-IA 
+##                                                  0 
+##                                        Orlando, FL 
+##                                                  0 
+##                                 Oshkosh-Neenah, WI 
+##                                                  0 
+##                   Oxnard-Thousand Oaks-Ventura, CA 
+##                                                  0 
+##                  Palm Bay-Melbourne-Titusville, FL 
+##                                                  0 
+##                         Panama City-Lynn Haven, FL 
+##                                                  0 
+##                     Pensacola-Ferry Pass-Brent, FL 
+##                                                  0 
+##                                         Peoria, IL 
+##                                                  0 
+##           Philadelphia-Camden-Wilmington, PA-NJ-DE 
+##                                                  0 
+##                                     Pittsburgh, PA 
+##                                                  0 
+##                     Port St. Lucie-Fort Pierce, FL 
+##                                                  0 
+##               Poughkeepsie-Newburgh-Middletown, NY 
+##                                                  0 
+##                                       Prescott, AZ 
+##                                                  0 
+##               Providence-Fall River-Warwick, MA-RI 
+##                                                  0 
+##                                     Provo-Orem, UT 
+##                                                  0 
+##                                         Pueblo, CO 
+##                                                  0 
+##                                    Punta Gorda, FL 
+##                                                  0 
+##                                         Racine, WI 
+##                                                  0 
+##                                   Raleigh-Cary, NC 
+##                                                  0 
+##                                        Reading, PA 
+##                                                  0 
+##                                    Reno-Sparks, NV 
+##                                                  0 
+##                       Riverside-San Bernardino, CA 
+##                                                  0 
+##                                        Roanoke, VA 
+##                                                  0 
+##                             Rochester-Dover, NH-ME 
+##                                                  0 
+##                                      Rochester, NY 
+##                                                  0 
+##                                       Rockford, IL 
+##                                                  0 
+##              Sacramento-Arden-Arcade-Roseville, CA 
+##                                                  0 
+##                 Saginaw-Saginaw Township North, MI 
+##                                                  0 
+##                                          Salem, OR 
+##                                                  0 
+##                                        Salinas, CA 
+##                                                  0 
+##                                      Salisbury, MD 
+##                                                  0 
+##                                 Salt Lake City, UT 
+##                                                  0 
+##                                    San Antonio, TX 
+##                                                  0 
+##                  San Diego-Carlsbad-San Marcos, CA 
+##                                                  0 
+##                  San Francisco-Oakland-Fremont, CA 
+##                                                  0 
+##                 San Jose-Sunnyvale-Santa Clara, CA 
+##                                                  0 
+##                    San Luis Obispo-Paso Robles, CA 
+##                                                  0 
+##               Santa Barbara-Santa Maria-Goleta, CA 
+##                                                  0 
+##                                       Santa Fe, NM 
+##                                                  0 
+##                            Santa Rosa-Petaluma, CA 
+##                                                  0 
+##                         Santa-Cruz-Watsonville, CA 
+##                                                  0 
+##                      Sarasota-Bradenton-Venice, FL 
+##                                                  0 
+##                                       Savannah, GA 
+##                                                  0 
+##                          Scranton-Wilkes Barre, PA 
+##                                                  0 
+##                        Shreveport-Bossier City, LA 
+##                                                  0 
+##                        South Bend-Mishawaka, IN-MI 
+##                                                  0 
+##                                    Spartanburg, SC 
+##                                                  0 
+##                                        Spokane, WA 
+##                                                  0 
+##                                    Springfield, IL 
+##                                                  0 
+##                                 Springfield, MA-CT 
+##                                                  0 
+##                                    Springfield, MO 
+##                                                  0 
+##                                    Springfield, OH 
+##                                                  0 
+##                                   St. Louis, MO-IL 
+##                                                  0 
+##                                       Stockton, CA 
+##                                                  0 
+##                                       Syracuse, NY 
+##                                                  0 
+##                                    Tallahassee, FL 
+##                                                  0 
+##                Tampa-St. Petersburg-Clearwater, FL 
+##                                                  0 
+##                                         Toledo, OH 
+##                                                  0 
+##                                         Topeka, KS 
+##                                                  0 
+##                                  Trenton-Ewing, NJ 
+##                                                  0 
+##                                         Tucson, AZ 
+##                                                  0 
+##                                          Tulsa, OK 
+##                                                  0 
+##                                     Tuscaloosa, AL 
+##                                                  0 
+##                                     Utica-Rome, NY 
+##                                                  0 
+##                                       Valdosta, GA 
+##                                                  0 
+##                              Vallejo-Fairfield, CA 
+##                                                  0 
+##                                     Vero Beach, FL 
+##                                                  0 
+##                                       Victoria, TX 
+##                                                  0 
+##                   Vineland-Millville-Bridgeton, NJ 
+##                                                  0 
+##         Virginia Beach-Norfolk-Newport News, VA-NC 
+##                                                  0 
+##                            Visalia-Porterville, CA 
+##                                                  0 
+##                                           Waco, TX 
+##                                                  0 
+##                                  Warner Robins, GA 
+##                                                  0 
+##       Washington-Arlington-Alexandria, DC-VA-MD-WV 
+##                                                  0 
+##                                      Waterbury, CT 
+##                                                  0 
+##                           Waterloo-Cedar Falls, IA 
+##                                                  0 
+##                                         Wausau, WI 
+##                                                  0 
+##                                        Wichita, KS 
+##                                                  0 
+##                                  Winston-Salem, NC 
+##                                                  0 
+##                                   Worcester, MA-CT 
+##                                                  0 
+##                                         Yakima, WA 
+##                                                  0 
+##                                   York-Hanover, PA 
+##                                                  0 
+##                     Youngstown-Warren-Boardman, OH 
+##                                                  0 
+##                                         Dayton, OH 
+##                                                  1 
+##                                       Richmond, VA 
+##                                                  1 
+##                     Houston-Baytown-Sugar Land, TX 
+##                                                  2 
+##                                    Sioux Falls, SD 
+##                                                  2 
+##                    Burlington-South Burlington, VT 
+##                                                  3 
+##                        Portland-South Portland, ME 
+##                                                  3 
+##                Portland-Vancouver-Beaverton, OR-WA 
+##                                                  3 
+##                                       Columbus, OH 
+##                                                  5 
+##                                       Fargo, ND-MN 
+##                                                  5 
+##                        Phoenix-Mesa-Scottsdale, AZ 
+##                                                  7 
+##                        Seattle-Tacoma-Bellevue, WA 
+##                                                  7 
+##                                      St. Cloud, MN 
+##                                                  7 
+##             Minneapolis-St Paul-Bloomington, MN-WI 
+##                                                 17
+```
+
+```r
 script_df <- rbind(script_df, 
                    data.frame(chunk_label="extract_features", 
                               chunk_step_major=max(script_df$chunk_step_major)+1, 
@@ -2818,11 +5167,12 @@ print(script_df)
 ```
 
 ```
-##        chunk_label chunk_step_major chunk_step_minor
-## 1      import_data                1                0
-## 2     inspect_data                2                1
-## 3      encode_data                2                2
-## 4 extract_features                3                0
+##           chunk_label chunk_step_major chunk_step_minor
+## 1         import_data                1                0
+## 2        inspect_data                2                1
+## 3 manage_missing_data                2                2
+## 4         encode_data                2                2
+## 5    extract_features                3                0
 ```
 
 ## Step `3`: extract features
@@ -2891,7 +5241,8 @@ We reject the null hypothesis i.e. we have evidence to conclude that am_fctr imp
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] tcltk     stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
 ## 
 ## other attached packages:
 ##  [1] sqldf_0.4-10    RSQLite_1.0.0   DBI_0.3.1       gsubfn_0.6-6   
@@ -2901,8 +5252,8 @@ We reject the null hypothesis i.e. we have evidence to conclude that am_fctr imp
 ## loaded via a namespace (and not attached):
 ##  [1] chron_2.3-45     codetools_0.2-10 colorspace_1.2-5 digest_0.6.8    
 ##  [5] evaluate_0.5.5   formatR_1.0      grid_3.1.2       gtable_0.1.2    
-##  [9] htmltools_0.2.6  knitr_1.9        lattice_0.20-30  MASS_7.3-39     
-## [13] Matrix_1.1-5     munsell_0.4.2    Rcpp_0.11.4      rmarkdown_0.5.1 
-## [17] scales_0.2.4     splines_3.1.2    stringr_0.6.2    tcltk_3.1.2     
+##  [9] htmltools_0.2.6  knitr_1.9        labeling_0.3     lattice_0.20-30 
+## [13] MASS_7.3-39      Matrix_1.1-5     munsell_0.4.2    Rcpp_0.11.4     
+## [17] rmarkdown_0.5.1  scales_0.2.4     splines_3.1.2    stringr_0.6.2   
 ## [21] tools_3.1.2      yaml_2.1.13
 ```
