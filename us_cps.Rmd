@@ -172,6 +172,53 @@ print(xtab_entity_df <- mycreate_xtab(entity_df, c("Race", "Hispanic")))
 # print(myplot_scatter(entity_df, "<col1_name>", "<col2_name>"))
 
 script_df <- rbind(script_df, 
+    data.frame(chunk_label="encode_data", 
+        chunk_step_major=max(script_df$chunk_step_major), 
+        chunk_step_minor=script_df[which.max(script_df$chunk_step_major), 
+                                   "chunk_step_minor"]+1))
+print(script_df)
+```
+
+### Step ``r script_df[nrow(script_df), "chunk_step_major"]``.``r script_df[nrow(script_df), "chunk_step_minor"]``: encode data
+```{r encode_data_1, cache=TRUE}
+map_metroarea_df <- myimport_data(
+    url="https://courses.edx.org/c4x/MITx/15.071x_2/asset/MetroAreaCodes.csv", 
+    comment="map_metroarea_df", print_diagn=TRUE)
+
+entity_df <- mymap_codes(df=entity_df, 
+    from_col_name="MetroAreaCode", to_col_name="MetroArea", 
+    					map_df=map_metroarea_df, map_join_col_name="Code")
+MetroArea_freq_entity_df <- as.data.frame(sort(table(entity_df$MetroArea)))
+names(MetroArea_freq_entity_df) <- "freq"
+MetroArea_freq_entity_df$MetroArea <- rownames(MetroArea_freq_entity_df)
+myprint_df(MetroArea_freq_entity_df)
+print(map_metroarea_df[grep("^Atlanta", map_metroarea_df$MetroArea),])
+print(nrow(subset(entity_df, MetroAreaCode == "12060")))
+#print(nrow(subset(MetroArea_freq_entity_df, length(grep("^Atlanta", MetroArea)) > 0)))
+#print(nrow(MetroArea_freq_entity_df[grep("^Atlanta", MetroArea_freq_entity_df$MetroArea),]))
+print(MetroArea_freq_entity_df[grep("^Atlanta", MetroArea_freq_entity_df$MetroArea),])
+
+print(map_metroarea_df[grep("^Baltimore", map_metroarea_df$MetroArea),])
+print(nrow(subset(entity_df, MetroAreaCode == "12580")))
+print(MetroArea_freq_entity_df[grep("^Baltimore", MetroArea_freq_entity_df$MetroArea),])
+
+print(map_metroarea_df[grep("^Boston", map_metroarea_df$MetroArea),])
+print(nrow(subset(entity_df, MetroAreaCode == "71650")))
+print(MetroArea_freq_entity_df[grep("^Boston", MetroArea_freq_entity_df$MetroArea),])
+
+print(map_metroarea_df[grep("^San Francisco", map_metroarea_df$MetroArea),])
+print(nrow(subset(entity_df, MetroAreaCode == "41860")))
+print(MetroArea_freq_entity_df[grep("^San Francisco", MetroArea_freq_entity_df$MetroArea),])
+
+print(prblm_3_4_arr <- sort(tapply(entity_df$Hispanic, entity_df$MetroArea, mean, na.rm=TRUE)))
+print(prblm_3_5_arr <- sort(tapply(entity_df$Race == "Asian", entity_df$MetroArea, mean, na.rm=TRUE)))
+print(prblm_3_6_arr <- sort(tapply(entity_df$Education == "No high school diploma", entity_df$MetroArea, mean, na.rm=TRUE), decreasing=TRUE))
+
+map_country_df <- myimport_data(
+    url="https://courses.edx.org/c4x/MITx/15.071x_2/asset/CountryCodes.csv", 
+    comment="map_metroarea_df", print_diagn=TRUE)
+
+script_df <- rbind(script_df, 
                    data.frame(chunk_label="extract_features", 
                               chunk_step_major=max(script_df$chunk_step_major)+1, 
                               chunk_step_minor=0))
