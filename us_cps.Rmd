@@ -172,6 +172,16 @@ print(xtab_entity_df <- mycreate_xtab(entity_df, c("Race", "Hispanic")))
 # print(myplot_scatter(entity_df, "<col1_name>", "<col2_name>"))
 
 script_df <- rbind(script_df, 
+    data.frame(chunk_label="manage_missing_data", 
+        chunk_step_major=max(script_df$chunk_step_major), 
+        chunk_step_minor=script_df[which.max(script_df$chunk_step_major), 
+                                   "chunk_step_minor"]+1))
+print(script_df)
+```
+### Step ``r script_df[nrow(script_df), "chunk_step_major"]``.``r script_df[nrow(script_df), "chunk_step_minor"]``: manage missing data
+```{r manage_missing_data_1, cache=TRUE}
+
+script_df <- rbind(script_df, 
     data.frame(chunk_label="encode_data", 
         chunk_step_major=max(script_df$chunk_step_major), 
         chunk_step_minor=script_df[which.max(script_df$chunk_step_major), 

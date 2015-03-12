@@ -685,6 +685,23 @@ print(xtab_entity_df <- mycreate_xtab(entity_df, c("Race", "Hispanic")))
 # print(myplot_scatter(entity_df, "<col1_name>", "<col2_name>"))
 
 script_df <- rbind(script_df, 
+    data.frame(chunk_label="manage_missing_data", 
+        chunk_step_major=max(script_df$chunk_step_major), 
+        chunk_step_minor=script_df[which.max(script_df$chunk_step_major), 
+                                   "chunk_step_minor"]+1))
+print(script_df)
+```
+
+```
+##           chunk_label chunk_step_major chunk_step_minor
+## 1         import_data                1                0
+## 2        inspect_data                2                1
+## 3 manage_missing_data                2                2
+```
+### Step `2`.`2`: manage missing data
+
+```r
+script_df <- rbind(script_df, 
     data.frame(chunk_label="encode_data", 
         chunk_step_major=max(script_df$chunk_step_major), 
         chunk_step_minor=script_df[which.max(script_df$chunk_step_major), 
@@ -693,10 +710,11 @@ print(script_df)
 ```
 
 ```
-##    chunk_label chunk_step_major chunk_step_minor
-## 1  import_data                1                0
-## 2 inspect_data                2                1
-## 3  encode_data                2                2
+##           chunk_label chunk_step_major chunk_step_minor
+## 1         import_data                1                0
+## 2        inspect_data                2                1
+## 3 manage_missing_data                2                2
+## 4         encode_data                2                2
 ```
 
 ### Step `2`.`2`: encode data
@@ -2873,8 +2891,7 @@ We reject the null hypothesis i.e. we have evidence to conclude that am_fctr imp
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] tcltk     stats     graphics  grDevices utils     datasets  methods  
-## [8] base     
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
 ##  [1] sqldf_0.4-10    RSQLite_1.0.0   DBI_0.3.1       gsubfn_0.6-6   
@@ -2884,8 +2901,8 @@ We reject the null hypothesis i.e. we have evidence to conclude that am_fctr imp
 ## loaded via a namespace (and not attached):
 ##  [1] chron_2.3-45     codetools_0.2-10 colorspace_1.2-5 digest_0.6.8    
 ##  [5] evaluate_0.5.5   formatR_1.0      grid_3.1.2       gtable_0.1.2    
-##  [9] htmltools_0.2.6  knitr_1.9        labeling_0.3     lattice_0.20-30 
-## [13] MASS_7.3-39      Matrix_1.1-5     munsell_0.4.2    Rcpp_0.11.4     
-## [17] rmarkdown_0.5.1  scales_0.2.4     splines_3.1.2    stringr_0.6.2   
+##  [9] htmltools_0.2.6  knitr_1.9        lattice_0.20-30  MASS_7.3-39     
+## [13] Matrix_1.1-5     munsell_0.4.2    Rcpp_0.11.4      rmarkdown_0.5.1 
+## [17] scales_0.2.4     splines_3.1.2    stringr_0.6.2    tcltk_3.1.2     
 ## [21] tools_3.1.2      yaml_2.1.13
 ```
