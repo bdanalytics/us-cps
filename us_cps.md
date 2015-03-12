@@ -425,39 +425,25 @@ print(sapply(names(predct_df), function(col) sum(is.na(predct_df[, col]))))
 # print(subset(entity_df, <col1_name> == max(entity_df$<col1_name>, na.rm=TRUE) & 
 #                         <col2_name> <= mean(entity_df$<col1_name>, na.rm=TRUE)))
 
-print(sort(table(entity_df$Industry)))
+print(Industry_freq_entity_df <- mycreate_tbl_df(entity_df, "Industry"))
 ```
 
 ```
-## 
-##                                Armed forces 
-##                                          29 
-##                                      Mining 
-##                                         550 
-## Agriculture, forestry, fishing, and hunting 
-##                                        1307 
-##                                 Information 
-##                                        1328 
-##                       Public administration 
-##                                        3186 
-##                              Other services 
-##                                        3224 
-##                Transportation and utilities 
-##                                        3260 
-##                                   Financial 
-##                                        4347 
-##                                Construction 
-##                                        4387 
-##                     Leisure and hospitality 
-##                                        6364 
-##                               Manufacturing 
-##                                        6791 
-##          Professional and business services 
-##                                        7519 
-##                                       Trade 
-##                                        8933 
-##             Educational and health services 
-##                                       15017
+##                                       Industry .freq
+## 1                                 Armed forces    29
+## 2                                       Mining   550
+## 3  Agriculture, forestry, fishing, and hunting  1307
+## 4                                  Information  1328
+## 5                        Public administration  3186
+## 6                               Other services  3224
+## 7                 Transportation and utilities  3260
+## 8                                    Financial  4347
+## 9                                 Construction  4387
+## 10                     Leisure and hospitality  6364
+## 11                               Manufacturing  6791
+## 12          Professional and business services  7519
+## 13                                       Trade  8933
+## 14             Educational and health services 15017
 ```
 
 ```r
@@ -753,17 +739,11 @@ map_metroarea_df <- myimport_data(
 ```
 
 ```r
-entity_df <- mymap_codes(df=entity_df, 
-    from_col_name="MetroAreaCode", to_col_name="MetroArea", 
-    					map_df=map_metroarea_df, map_join_col_name="Code")
+entity_df <- mymap_codes(entity_df, "MetroAreaCode", "MetroArea", 
+    					map_metroarea_df, map_join_col_name="Code")
 ```
 
 ```
-## Loading required package: sqldf
-## Loading required package: gsubfn
-## Loading required package: proto
-## Loading required package: RSQLite
-## Loading required package: DBI
 ## Loading required package: tcltk
 ```
 
@@ -794,48 +774,275 @@ entity_df <- mymap_codes(df=entity_df,
 ![](us_cps_files/figure-html/encode_data_1-1.png) 
 
 ```r
-MetroArea_freq_entity_df <- as.data.frame(sort(table(entity_df$MetroArea)))
-names(MetroArea_freq_entity_df) <- "freq"
-MetroArea_freq_entity_df$MetroArea <- rownames(MetroArea_freq_entity_df)
-myprint_df(MetroArea_freq_entity_df)
+print(MetroArea_freq_entity_df <- mycreate_tbl_df(entity_df, "MetroArea"))
 ```
 
 ```
-##                       freq             MetroArea
-## Bowling Green, KY       29     Bowling Green, KY
-## Ocean City, NJ          30        Ocean City, NJ
-## Springfield, OH         34       Springfield, OH
-## Bloomington-Normal IL   40 Bloomington-Normal IL
-## Valdosta, GA            42          Valdosta, GA
-## Warner Robins, GA       42     Warner Robins, GA
-##                                            freq
-## Canton-Massillon, OH                        118
-## Lafayette, LA                               181
-## El Paso, TX                                 244
-## Fresno, CA                                  303
-## Wichita, KS                                 427
-## Virginia Beach-Norfolk-Newport News, VA-NC  597
-##                                                                             MetroArea
-## Canton-Massillon, OH                                             Canton-Massillon, OH
-## Lafayette, LA                                                           Lafayette, LA
-## El Paso, TX                                                               El Paso, TX
-## Fresno, CA                                                                 Fresno, CA
-## Wichita, KS                                                               Wichita, KS
-## Virginia Beach-Norfolk-Newport News, VA-NC Virginia Beach-Norfolk-Newport News, VA-NC
-##                                                    freq
-## Providence-Fall River-Warwick, MA-RI               2284
-## Chicago-Naperville-Joliet, IN-IN-WI                2772
-## Philadelphia-Camden-Wilmington, PA-NJ-DE           2855
-## Los Angeles-Long Beach-Santa Ana, CA               4102
-## Washington-Arlington-Alexandria, DC-VA-MD-WV       4177
-## New York-Northern New Jersey-Long Island, NY-NJ-PA 5409
-##                                                                                             MetroArea
-## Providence-Fall River-Warwick, MA-RI                             Providence-Fall River-Warwick, MA-RI
-## Chicago-Naperville-Joliet, IN-IN-WI                               Chicago-Naperville-Joliet, IN-IN-WI
-## Philadelphia-Camden-Wilmington, PA-NJ-DE                     Philadelphia-Camden-Wilmington, PA-NJ-DE
-## Los Angeles-Long Beach-Santa Ana, CA                             Los Angeles-Long Beach-Santa Ana, CA
-## Washington-Arlington-Alexandria, DC-VA-MD-WV             Washington-Arlington-Alexandria, DC-VA-MD-WV
-## New York-Northern New Jersey-Long Island, NY-NJ-PA New York-Northern New Jersey-Long Island, NY-NJ-PA
+##                                              MetroArea .freq
+## 1                                    Bowling Green, KY    29
+## 2                                       Ocean City, NJ    30
+## 3                                      Springfield, OH    34
+## 4                                Bloomington-Normal IL    40
+## 5                                         Valdosta, GA    42
+## 6                                    Warner Robins, GA    42
+## 7                                      Tallahassee, FL    43
+## 8                                         Columbia, MO    47
+## 9                                      Punta Gorda, FL    48
+## 10                                         Midland, TX    51
+## 11                             Niles-Benton Harbor, MI    51
+## 12                                    Johnson City, TN    52
+## 13                                        Santa Fe, NM    52
+## 14                                        Prescott, AZ    54
+## 15                    Vineland-Millville-Bridgeton, NJ    54
+## 16                       Hickory-Morgantown-Lenoir, NC    57
+## 17                                          Madera, CA    57
+## 18                                     Columbus, GA-AL    59
+## 19                                          Joplin, MO    59
+## 20                          Panama City-Lynn Haven, FL    59
+## 21                                           Chico, CA    60
+## 22                                 Anniston-Oxford, AL    61
+## 23                                            Napa, CA    61
+## 24                                        Anderson, IN    62
+## 25                                        Florence, AL    63
+## 26                                    Jacksonville, NC    63
+## 27                                       Johnstown, PA    63
+## 28                                         Lubbock, TX    63
+## 29                                          Monroe, MI    63
+## 30                                        Anderson, SC    64
+## 31                                      Farmington, NM    64
+## 32                             Athens-Clark County, GA    65
+## 33                                 Gulfport-Biloxi, MS    65
+## 34                                        Longview, TX    65
+## 35                                           Macon, GA    65
+## 36                    Leominster-Fitchburg-Gardner, MA    66
+## 37                                         Roanoke, VA    66
+## 38                          Santa-Cruz-Watsonville, CA    66
+## 39                            Kingsport-Bristol, TN-VA    67
+## 40                                          Albany, GA    68
+## 41                                      Bellingham, WA    70
+## 42                                     Gainesville, FL    70
+## 43                                         Jackson, MI    70
+## 44                                      Binghamton, NY    73
+## 45                                       Lynchburg, VA    73
+## 46                  Saginaw-Saginaw Township North, MI    74
+## 47                                       Salisbury, MD    74
+## 48                                 Barnstable Town, MA    75
+## 49                                           Ocala, FL    76
+## 50                                     Springfield, IL    76
+## 51                                    Fayetteville, NC    77
+## 52                          Michigan City-La Porte, IN    77
+## 53                     San Luis Obispo-Paso Robles, CA    77
+## 54                             Holland-Grand Haven, MI    78
+## 55                                      Tuscaloosa, AL    78
+## 56                           Brownsville-Harlingen, TX    79
+## 57                                      Vero Beach, FL    79
+## 58                                            Waco, TX    79
+## 59              Fort Walton Beach-Crestview-Destin, FL    80
+## 60                                      Utica-Rome, NY    80
+## 61                                         Decatur, IL    81
+## 62                                    Lake Charles, LA    81
+## 63                         South Bend-Mishawaka, IN-MI    81
+## 64                                         Altoona, PA    82
+## 65                        Huntington-Ashland, WV-KY-OH    82
+## 66                                         Medford, OR    82
+## 67                             Naples-Marco Island, FL    82
+## 68                                       St. Cloud, MN    82
+## 69                                       Ann Arbor, MI    85
+## 70                                  Oshkosh-Neenah, WI    85
+## 71                       Hagerstown-Martinsburg, MD-WV    86
+## 72                            Bremerton-Silverdale, WA    87
+## 73                                            Erie, PA    87
+## 74                                Kankakee-Bradley, IL    87
+## 75                                        Kingston, NY    87
+## 76                                        Amarillo, TX    88
+## 77                                          Laredo, TX    89
+## 78                                    Harrisonburg, VA    90
+## 79                          Muskegon-Norton Shores, MI    90
+## 80                                   Trenton-Ewing, NJ    91
+## 81                                         Decatur, Al    96
+## 82                                          Wausau, WI    96
+## 83                                          Lawton, OK    97
+## 84                                        Lawrence, KS    98
+## 85                                       El Centro, CA    99
+## 86                                   Evansville, IN-KY    99
+## 87                                      Janesville, WI    99
+## 88                                         Olympia, WA    99
+## 89                                     Spartanburg, SC    99
+## 90                        Killeen-Temple-Fort Hood, TX   101
+## 91                                           Flint, MI   102
+## 92          Myrtle Beach-Conway-North Myrtle Beach, SC   102
+## 93                                      Montgomery, AL   103
+## 94                                     Bloomington, IN   104
+## 95                                         Salinas, CA   104
+## 96                                   Fort Smith, AR-OK   105
+## 97                                          Merced, CA   106
+## 98                                      Las Cruses, NM   107
+## 99                      Pensacola-Ferry Pass-Brent, FL   107
+## 100                     Port St. Lucie-Fort Pierce, FL   109
+## 101                                     Eau Claire, WI   110
+## 102                                         Mobile, AL   110
+## 103                                  Atlantic City, NJ   111
+## 104                                        Danbury, CT   112
+## 105                                         Peoria, IL   112
+## 106                                         Yakima, WA   112
+## 107                                      La Crosse, WI   114
+## 108                                       Rockford, IL   114
+## 109                                      Asheville, NC   116
+## 110                                       Victoria, TX   116
+## 111                                  Coeur d'Alene, ID   117
+## 112                                     Huntsville, AL   117
+## 113                                   York-Hanover, PA   117
+## 114                               Canton-Massillon, OH   118
+## 115                           Lansing-East Lansing, MI   119
+## 116                                         Racine, WI   119
+## 117                            Visalia-Porterville, CA   121
+## 118                               Champaign-Urbana, IL   122
+## 119                           Beaumont-Port Author, TX   123
+## 120                                        Appleton,WI   125
+## 121                                      Duluth, MN-WI   126
+## 122                              Kalamazoo-Portage, MI   127
+## 123                                  Winston-Salem, NC   127
+## 124                            Santa Rosa-Petaluma, CA   129
+## 125                                         Pueblo, CO   130
+## 126                                      Iowa City, IA   131
+## 127                                 Corpus Christi, TX   132
+## 128               Santa Barbara-Santa Maria-Goleta, CA   132
+## 129                              Vallejo-Fairfield, CA   133
+## 130                                     Fort Wayne, IN   136
+## 131                                      Green Bay, WI   136
+## 132                                           Bend, OR   140
+## 133             Deltona-Daytona Beach-Ormond Beach, FL   140
+## 134                                        Reading, PA   142
+## 135                                   Worcester, MA-CT   144
+## 136                          Cape Coral-Fort Myers, FL   146
+## 137                        Shreveport-Bossier City, LA   146
+## 138                          Lakeland-Winter Haven, FL   149
+## 139                     Youngstown-Warren-Boardman, OH   153
+## 140                                 Springfield, MA-CT   155
+## 141                                      Lancaster, PA   156
+## 142                                        Spokane, WA   156
+## 143                           Waterloo-Cedar Falls, IA   156
+## 144                                      Waterbury, CT   157
+## 145                                        Modesto, CA   158
+## 146                     Augusta-Richmond County, GA-SC   161
+## 147                                    Springfield, MO   161
+## 148                                        Greeley, CO   162
+## 149                                 Chattanooga, TN-GA   167
+## 150                                      Knoxville, TN   168
+## 151                  Palm Bay-Melbourne-Titusville, FL   168
+## 152                                          Salem, OR   170
+## 153                                        Boulder, CO   171
+## 154                            Harrisburg-Carlisle, PA   174
+## 155                          Scranton-Wilkes Barre, PA   176
+## 156                                         Monroe, LA   179
+## 157                                      Lafayette, LA   181
+## 158                                         Topeka, KS   182
+## 159                                     Greenville, SC   185
+## 160                                         Durham, NC   189
+## 161                      Sarasota-Bradenton-Venice, FL   192
+## 162                                       Stockton, CA   193
+## 163                         McAllen-Edinburg-Pharr, TX   195
+## 164                                   Cedar Rapids, IA   196
+## 165                             Eugene-Springfield, OR   196
+## 166                              Lexington-Fayette, KY   198
+## 167                                       Billings, MT   199
+## 168               Poughkeepsie-Newburgh-Middletown, NY   201
+## 169                                       Savannah, GA   202
+## 170                          Norwich-New London, CT-RI   203
+## 171                          Fort Collins-Loveland, CO   206
+## 172                                         Bangor, ME   208
+## 173              Fayetteville-Springdale-Rogers, AR-MO   215
+## 174                                        Jackson, MS   222
+## 175                                       Syracuse, NY   223
+## 176                                          Akron, OH   231
+## 177                    Charleston-North Charleston, SC   232
+## 178                                         Toledo, OH   235
+## 179                Davenport-Moline-Rock Island, IA-IL   240
+## 180                                        El Paso, TX   244
+## 181                                    Bakersfield, CA   245
+## 182                          Greensboro-High Point, NC   251
+## 183                                    Baton Rouge, LA   262
+## 184                                     Charleston, WV   262
+## 185                             Rochester-Dover, NH-ME   262
+## 186                   Oxnard-Thousand Oaks-Ventura, CA   267
+## 187                        Albany-Schenectady-Troy, NY   268
+## 188                                         Dayton, OH   268
+## 189                                        Madison, WI   284
+## 190                                       Columbia, SC   291
+## 191                                         Tucson, AZ   302
+## 192                                         Fresno, CA   303
+## 193                           Grand Rapids-Wyoming, MI   304
+## 194                                      Rochester, NY   307
+## 195                                     Provo-Orem, UT   309
+## 196                                    Reno-Sparks, NV   310
+## 197                                          Tulsa, OK   323
+## 198                  Allentown-Bethlehem-Easton, PA-NJ   334
+## 199                                   Raleigh-Cary, NC   336
+## 200                          Buffalo-Niagara Falls, NY   344
+## 201                                  Memphis, TN-MS-AR   348
+## 202                    New Orleans-Metairie-Kenner, LA   367
+## 203                               Colorado Springs, CO   372
+## 204                              Birmingham-Hoover, AL   392
+## 205                                   Jacksonville, FL   393
+## 206                  Little Rock-North Little Rock, AR   404
+## 207                               Ogden-Clearfield, UT   423
+## 208                                        Wichita, KS   427
+## 209                                       Fargo, ND-MN   432
+## 210                                          Dover, DE   456
+## 211                                       Richmond, VA   490
+## 212                                     Des Moines, IA   501
+## 213                Nashville-Davidson-Murfreesboro, TN   505
+## 214                                      New Haven, CT   506
+## 215                              Austin-Round Rock, TX   516
+## 216                  Charlotte-Gastonia-Concord, NC-SC   517
+## 217                                  Louisville, KY-IN   519
+## 218                                       Columbus, OH   551
+## 219                                   Indianapolis, IN   570
+## 220                                    Sioux Falls, SD   595
+## 221         Virginia Beach-Norfolk-Newport News, VA-NC   597
+## 222                                  Oklahoma City, OK   604
+## 223                                    San Antonio, TX   607
+## 224                                    Albuquerque, NM   609
+## 225                                        Orlando, FL   610
+## 226                               Boise City-Nampa, ID   644
+## 227                    Burlington-South Burlington, VT   657
+## 228              Sacramento-Arden-Arcade-Roseville, CA   667
+## 229                 San Jose-Sunnyvale-Santa Clara, CA   670
+## 230                        Cleveland-Elyria-Mentor, OH   681
+## 231                        Portland-South Portland, ME   701
+## 232                  Milwaukee-Waukesha-West Allis, WI   714
+## 233                    Cincinnati-Middletown, OH-KY-IN   719
+## 234                                 Salt Lake City, UT   723
+## 235                    Bridgeport-Stamford-Norwalk, CT   730
+## 236                                     Pittsburgh, PA   732
+## 237                Tampa-St. Petersburg-Clearwater, FL   842
+## 238           Hartford-West Hartford-East Hartford, CT   885
+## 239                  San Diego-Carlsbad-San Marcos, CA   907
+## 240                                   St. Louis, MO-IL   956
+## 241                        Omaha-Council Bluffs, NE-IA   957
+## 242                                 Kansas City, MO-KS   962
+## 243                        Phoenix-Mesa-Scottsdale, AZ   971
+## 244                Portland-Vancouver-Beaverton, OR-WA  1089
+## 245                        Seattle-Tacoma-Bellevue, WA  1255
+## 246                       Riverside-San Bernardino, CA  1290
+## 247                             Las Vegas-Paradise, NV  1299
+## 248                         Detroit-Warren-Livonia, MI  1354
+## 249                  San Francisco-Oakland-Fremont, CA  1386
+## 250                               Baltimore-Towson, MD  1483
+## 251                                  Denver-Aurora, CO  1504
+## 252                 Atlanta-Sandy Springs-Marietta, GA  1552
+## 253              Miami-Fort Lauderdale-Miami Beach, FL  1554
+## 254                                       Honolulu, HI  1576
+## 255                     Houston-Baytown-Sugar Land, TX  1649
+## 256                    Dallas-Fort Worth-Arlington, TX  1863
+## 257             Minneapolis-St Paul-Bloomington, MN-WI  1942
+## 258                     Boston-Cambridge-Quincy, MA-NH  2229
+## 259               Providence-Fall River-Warwick, MA-RI  2284
+## 260                Chicago-Naperville-Joliet, IN-IN-WI  2772
+## 261           Philadelphia-Camden-Wilmington, PA-NJ-DE  2855
+## 262               Los Angeles-Long Beach-Santa Ana, CA  4102
+## 263       Washington-Arlington-Alexandria, DC-VA-MD-WV  4177
+## 264 New York-Northern New Jersey-Long Island, NY-NJ-PA  5409
 ```
 
 ```r
@@ -856,14 +1063,12 @@ print(nrow(subset(entity_df, MetroAreaCode == "12060")))
 ```
 
 ```r
-#print(nrow(subset(MetroArea_freq_entity_df, length(grep("^Atlanta", MetroArea)) > 0)))
-#print(nrow(MetroArea_freq_entity_df[grep("^Atlanta", MetroArea_freq_entity_df$MetroArea),]))
 print(MetroArea_freq_entity_df[grep("^Atlanta", MetroArea_freq_entity_df$MetroArea),])
 ```
 
 ```
-##                                    freq                          MetroArea
-## Atlanta-Sandy Springs-Marietta, GA 1552 Atlanta-Sandy Springs-Marietta, GA
+##                              MetroArea .freq
+## 252 Atlanta-Sandy Springs-Marietta, GA  1552
 ```
 
 ```r
@@ -888,8 +1093,8 @@ print(MetroArea_freq_entity_df[grep("^Baltimore", MetroArea_freq_entity_df$Metro
 ```
 
 ```
-##                      freq            MetroArea
-## Baltimore-Towson, MD 1483 Baltimore-Towson, MD
+##                MetroArea .freq
+## 250 Baltimore-Towson, MD  1483
 ```
 
 ```r
@@ -914,8 +1119,8 @@ print(MetroArea_freq_entity_df[grep("^Boston", MetroArea_freq_entity_df$MetroAre
 ```
 
 ```
-##                                freq                      MetroArea
-## Boston-Cambridge-Quincy, MA-NH 2229 Boston-Cambridge-Quincy, MA-NH
+##                          MetroArea .freq
+## 258 Boston-Cambridge-Quincy, MA-NH  2229
 ```
 
 ```r
@@ -940,8 +1145,8 @@ print(MetroArea_freq_entity_df[grep("^San Francisco", MetroArea_freq_entity_df$M
 ```
 
 ```
-##                                   freq                         MetroArea
-## San Francisco-Oakland-Fremont, CA 1386 San Francisco-Oakland-Fremont, CA
+##                             MetroArea .freq
+## 249 San Francisco-Oakland-Fremont, CA  1386
 ```
 
 ```r
@@ -2565,13 +2770,13 @@ map_country_df <- myimport_data(
 ## 4   78     U. S. Virgin Islands
 ## 5   96 Other U. S. Island Areas
 ## 6  100                  Albania
-##     Code   Country
-## 56   207     China
-## 72   229     Nepal
-## 89   310    Belize
-## 120  373 Venezuela
-## 127  416  Ethiopia
-## 144  508      Fiji
+##     Code                        Country
+## 64   215                          Japan
+## 88   303                         Mexico
+## 102  330                        Grenada
+## 107  340 St. Vincent and the Grenadines
+## 117  369                       Paraguay
+## 124  407                       Cameroon
 ##     Code                Country
 ## 144  508                   Fiji
 ## 145  515            New Zealand

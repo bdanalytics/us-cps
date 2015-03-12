@@ -131,7 +131,7 @@ print(sapply(names(predct_df), function(col) sum(is.na(predct_df[, col]))))
 # print(subset(entity_df, <col1_name> == max(entity_df$<col1_name>, na.rm=TRUE) & 
 #                         <col2_name> <= mean(entity_df$<col1_name>, na.rm=TRUE)))
 
-print(sort(table(entity_df$Industry)))
+print(Industry_freq_entity_df <- mycreate_tbl_df(entity_df, "Industry"))
 print(sort(table(entity_df$State)))
 print(Citizenship_freq_entity_df <- as.data.frame(table(entity_df$Citizenship)))
 names(Citizenship_freq_entity_df)[1] <- "Citizenship"; print(Citizenship_freq_entity_df)
@@ -185,17 +185,12 @@ map_metroarea_df <- myimport_data(
     url="https://courses.edx.org/c4x/MITx/15.071x_2/asset/MetroAreaCodes.csv", 
     comment="map_metroarea_df", print_diagn=TRUE)
 
-entity_df <- mymap_codes(df=entity_df, 
-    from_col_name="MetroAreaCode", to_col_name="MetroArea", 
-    					map_df=map_metroarea_df, map_join_col_name="Code")
-MetroArea_freq_entity_df <- as.data.frame(sort(table(entity_df$MetroArea)))
-names(MetroArea_freq_entity_df) <- "freq"
-MetroArea_freq_entity_df$MetroArea <- rownames(MetroArea_freq_entity_df)
-myprint_df(MetroArea_freq_entity_df)
+entity_df <- mymap_codes(entity_df, "MetroAreaCode", "MetroArea", 
+    					map_metroarea_df, map_join_col_name="Code")
+print(MetroArea_freq_entity_df <- mycreate_tbl_df(entity_df, "MetroArea"))
+
 print(map_metroarea_df[grep("^Atlanta", map_metroarea_df$MetroArea),])
 print(nrow(subset(entity_df, MetroAreaCode == "12060")))
-#print(nrow(subset(MetroArea_freq_entity_df, length(grep("^Atlanta", MetroArea)) > 0)))
-#print(nrow(MetroArea_freq_entity_df[grep("^Atlanta", MetroArea_freq_entity_df$MetroArea),]))
 print(MetroArea_freq_entity_df[grep("^Atlanta", MetroArea_freq_entity_df$MetroArea),])
 
 print(map_metroarea_df[grep("^Baltimore", map_metroarea_df$MetroArea),])
