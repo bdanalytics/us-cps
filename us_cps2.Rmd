@@ -210,6 +210,7 @@ glb_date_tzs <- list();  #glb_date_tzs[["<date_var>"]] <- "America/New_York"
 
 glb_txt_vars <- NULL # or c("<txt_var1>", "<txt_var2>")   
 #Sys.setlocale("LC_ALL", "C") # For english
+
 glb_append_stop_words <- list()
 # Remember to use unstemmed words
 #orderBy(~ -cor.y.abs, subset(glb_feats_df, grepl("[HSA]\\.T\\.", id) & !is.na(cor.high.X)))
@@ -220,8 +221,10 @@ glb_append_stop_words <- list()
 #                             )
 #subset(glb_allobs_df, S.T.newyorktim > 0)[, c("UniqueID", "Snippet", "S.T.newyorktim")]
 #glb_txt_lst[["Snippet"]][which(glb_allobs_df$UniqueID %in% c(8394, 8317, 8339, 8350, 8307))]
+
 glb_important_terms <- list()
 # Remember to use stemmed terms 
+
 glb_sprs_thresholds <- NULL # or c(0.988, 0.970, 0.970) # Generates 29, 22, 22 terms
 # Properties:
 #   numrows(glb_feats_df) << numrows(glb_fitobs_df)
